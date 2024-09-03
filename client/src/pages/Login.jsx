@@ -6,7 +6,6 @@ export function Login() {
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-indigo-400 to-cyan-400 text-white">
       <div className="w-full max-w-md p-8 bg-gray-800 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold mb-6 text-center bg-gradient-to-r from-blue-400 to-pink-200 bg-clip-text text-transparent">4U Task</h2>
-        <form>
           <div className="mb-4">
             <label htmlFor="email" className="block text-sm font-medium mb-2">Correo</label>
             <input
@@ -49,7 +48,6 @@ export function Login() {
           </button>
 
           <NavigationRegister />
-        </form>
       </div>
     </div>
   )
