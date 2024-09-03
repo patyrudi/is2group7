@@ -8,7 +8,7 @@ class Usuario(models.Model):
     correoUsuario = models.EmailField(max_length=45)
     contrasena = models.CharField(max_length=45)
 
-    def str(self):
+    def __str__(self):
         return f"{self.nombreUsuario} {self.apellidoUsuario}"
 
 
@@ -17,7 +17,7 @@ class EspacioDeTrabajo(models.Model):
     nombreEspacio = models.CharField(max_length=45)
     estadoEspacio = models.BooleanField(default=True)
 
-    def str(self):
+    def __str__(self):
         return self.nombreEspacio
 
 
@@ -26,7 +26,7 @@ class Tablero(models.Model):
     nombreTablero = models.CharField(max_length=45)
     idEspacio = models.ForeignKey(EspacioDeTrabajo, on_delete=models.CASCADE)
 
-    def str(self):
+    def __str__(self):
         return self.nombreTablero
 
 
@@ -37,7 +37,7 @@ class Lista(models.Model):
     idTablero = models.ForeignKey(Tablero, on_delete=models.CASCADE)
     idEstado = models.ForeignKey('Estado', on_delete=models.CASCADE)
 
-    def str(self):
+    def __str__(self):
         return self.nombreLista
 
 
@@ -45,7 +45,7 @@ class Estado(models.Model):
     idEstado = models.AutoField(primary_key=True)
     descripcionEstado = models.CharField(max_length=45)
 
-    def str(self):
+    def __str__(self):
         return self.descripcionEstado
 
 
@@ -59,7 +59,7 @@ class Tarjeta(models.Model):
     idLista = models.ForeignKey(Lista, on_delete=models.CASCADE)
     idUsuarioAsignado = models.ForeignKey(Usuario, on_delete=models.CASCADE)
 
-    def str(self):
+    def __str__(self):
         return self.nombreActividad
     
 class Task(models.Model):
@@ -69,7 +69,7 @@ class Task(models.Model):
     vencimientoTask = models.DateField()
     idTarjeta = models.ForeignKey(Tarjeta, on_delete=models.CASCADE)
 
-    def str(self):
+    def __str__(self):
         return self.descripcionTask
 
 
@@ -79,7 +79,5 @@ class UsuariosAsignados(models.Model):
     idUser = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     idEspacio = models.ForeignKey(EspacioDeTrabajo, on_delete=models.CASCADE)
 
-    def str(self):
+    def __str__(self):
         return f"{self.tipoUsuario} - {self.idUser}"
-
-
