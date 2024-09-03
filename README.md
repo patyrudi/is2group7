@@ -11,7 +11,6 @@
 - **Patricia Ruíz Díaz**
 
 # Como hacer que funcione
-- **Borrar .venv**
 - **Crear un entorno virtual en la terminal  con el comando: python -m venv venv**
 - **En visual studio code presionar f1 y elegir el entorno virtual recien creado**
 - **Abrir una nueva terminal y ejecutar el comando: pip install -r requirements.txt**
