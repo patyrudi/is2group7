@@ -20,3 +20,10 @@
 - **Escribir npm i**
 - **Esperar**
 - **Escribir npm run dev**
+
+# Para recibir actualizaciones en el repositorio local
+- **En consola escribir git pull**
+- **En caso de contener errores tienes dos opciones**
+- **Hacer un "git commit" de los cambios que hicieron localmente o hacer un "git stash" para eliminar los cambios que hicieron localmente**
+- **En consola, volver a escribir git pull**
+- **El repositorio local se actualizará con los cambios más recientes**
