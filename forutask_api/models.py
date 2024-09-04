@@ -39,7 +39,6 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 
 
 
-
 class EspacioDeTrabajo(models.Model):
     idEspacio = models.AutoField(primary_key=True)
     nombreEspacio = models.CharField(max_length=45)
