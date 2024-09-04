@@ -1,5 +1,4 @@
 import { NavigationLogin } from "../components/NavigationLogin";
-import { NavigationLogin } from "../components/NavigationLogin";
 
 export function Register() {
   return (
