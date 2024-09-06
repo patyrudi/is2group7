@@ -1,22 +1,30 @@
-import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
-import {Login} from './pages/Login';
-import {Register} from './pages/Register';
-import {MenuPrincipal} from './pages/MenuPrincipal';
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { Login } from "./pages/Login";
+import { Register } from "./pages/Register";
+import { MainMenu } from "./pages/MainMenu";
+import { Toaster } from "react-hot-toast";
+import { UserManagement } from "./pages/UserManagement";
+import { Workspaces } from "./pages/Workspaces";
+import { MyProfile } from './pages/MyProfile'
 
 function App() {
   return (
     <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Navigate to="/MainMenu" />} />
+        <Route path="" element={<Navigate to="/MainMenu" />} />
+        <Route path="/Login" element={<Login />} />
+        <Route path="/Register" element={<Register />} />
+        <Route path="/MainMenu" element={<MainMenu />} />
+        <Route path="/UserManagement" element={<UserManagement />} />
+        <Route path="/Workspaces" element={<Workspaces />} />
+        <Route path="/MyProfile" element={<MyProfile />} />
 
-    <Routes>
-      <Route path="/" element={<Navigate to="/Login" />} />
-      <Route path="" element={<Navigate to="/Login" />} />
-      <Route path="/Login" element={<Login />} />
-      <Route path="/Register" element={<Register />} />
-      <Route path="/MenuPrincipal" element={<MenuPrincipal />} />
-    </Routes>
 
+      </Routes>
+      <Toaster />
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;

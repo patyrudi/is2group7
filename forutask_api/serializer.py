@@ -1,13 +1,20 @@
 # serializers.py
 from rest_framework import serializers
-from django.contrib.auth import authenticate
-from rest_framework.exceptions import AuthenticationFailed
 from .models import Usuario, EspacioDeTrabajo, Tablero, Lista, Estado, Tarjeta, Task, UsuariosAsignados
 
 class UsuarioSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(source='idUsuario', read_only=True)
     class Meta:
         model = Usuario
         fields = '__all__'
+
+    def create(self, validated_data):
+        password = validated_data.pop('password', None)
+        instance = self.Meta.model(**validated_data)
+        if password is not None:
+            instance.set_password(password)
+        instance.save()
+        return instance
 
 class EspacioDeTrabajoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -43,20 +50,3 @@ class UsuariosAsignadosSerializer(serializers.ModelSerializer):
     class Meta:
         model = UsuariosAsignados
         fields = '__all__'
-
-# Serializador de autenticación personalizada
-class CustomAuthTokenSerializer(serializers.Serializer):
-    correoUsuario = serializers.EmailField()
-    contrasena = serializers.CharField()
-
-    def validate(self, data):
-        correoUsuario = data.get('correoUsuario')
-        contrasena = data.get('contrasena')
-
-        # Autenticación personalizada
-        user = authenticate(correoUsuario=correoUsuario, contrasena=contrasena)
-        if user is None:
-            raise AuthenticationFailed('Credenciales inválidas')
-
-        return {'user': user}
-
