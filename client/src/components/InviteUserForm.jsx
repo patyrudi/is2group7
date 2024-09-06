@@ -2,6 +2,7 @@ import { useState } from "react";
 import { createAssignedWorkspaces } from "../api/workspaces.api";
 import { getUserIdByUsername } from "../api/usuarios.api";
 
+
 export function InviteUserForm({ idEspacio }) {
   const [username, setUsername] = useState("");
   const [error, setError] = useState(null);

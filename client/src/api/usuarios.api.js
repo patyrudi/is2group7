@@ -1,6 +1,7 @@
 import api from './axiosConfig';
+/**no toquen mas */
 
-export const getAll = () => api.get('/usuarios/');
+export const getAllUsers = () => api.get('/usuarios/');
 
 export const getUser = (idUsuario) => api.get(`/usuarios/${idUsuario}`);
 
