@@ -1,17 +1,22 @@
 import { useEffect, useState } from "react";
 import { NavBar } from "../components/NavBar";
-import { getAllAssignedWorkspaces, getWorkspace, createWorkspace } from "../api/workspaces.api";
+import {
+  getAllAssignedWorkspaces,
+  getWorkspace,
+  createWorkspace,
+} from "../api/workspaces.api";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 export function Workspaces() {
   const [workspaces, setWorkspaces] = useState([]);
   const [isCreating, setIsCreating] = useState(false);
   const { register, handleSubmit, reset } = useForm();
-  
-  // Obtener el idUsuario desde localStorage
-  const userId = localStorage.getItem('idUsuario');
+  const navigate = useNavigate();
 
+  // Obtener el idUsuario desde localStorage
+  const userId = localStorage.getItem("idUsuario");
 
   const loadWorkspaces = async () => {
     try {
@@ -19,16 +24,27 @@ export function Workspaces() {
       const assignedWorkspaces = response.data;
 
       // Filtrar los espacios asignados para el idUsuario específico
-      const filteredWorkspaces = assignedWorkspaces.filter(assigned => assigned.idUser === parseInt(userId));
+      const filteredWorkspaces = assignedWorkspaces.filter(
+        (assigned) => assigned.idUser === parseInt(userId)
+      );
 
       const workspacesDetails = await Promise.all(
         filteredWorkspaces.map(async (assigned) => {
           const workspaceResponse = await getWorkspace(assigned.idEspacio);
-          return workspaceResponse.data;
+          const workspace = workspaceResponse.data;
+          
+          // Filtrar por estadoEspacio
+          if (workspace.estadoEspacio) {
+            return workspace;
+          }
+          return null;
         })
       );
 
-      setWorkspaces(workspacesDetails);
+      // Eliminar valores nulos del array resultante
+      const activeWorkspaces = workspacesDetails.filter(workspace => workspace !== null);
+      
+      setWorkspaces(activeWorkspaces);
     } catch (error) {
       console.error("Error al cargar los espacios", error);
       toast.error("Error al cargar los espacios");
@@ -61,7 +77,10 @@ export function Workspaces() {
           {workspaces.map((workspace) => (
             <div
               key={workspace.idEspacio}
-              className="bg-gray-800 p-10 rounded-lg text-center"
+              className="bg-gray-800 p-12 rounded-lg text-center hover:bg-gray-700"
+              onClick={() => {
+                navigate(`/Workspaces/${workspace.idEspacio}/Boards/`);
+              }}
             >
               {workspace.nombreEspacio}
             </div>
@@ -70,7 +89,7 @@ export function Workspaces() {
           {!isCreating ? (
             <button
               onClick={() => setIsCreating(true)}
-              className="bg-gray-800 p-4 rounded-lg text-center flex justify-center items-center"
+              className="bg-gray-800 p-4 rounded-lg text-center flex justify-center items-center hover:bg-gray-700"
             >
               <span className="text-3xl">+</span>
             </button>

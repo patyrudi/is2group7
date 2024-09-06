@@ -5,7 +5,8 @@ import { MainMenu } from "./pages/MainMenu";
 import { Toaster } from "react-hot-toast";
 import { UserManagement } from "./pages/UserManagement";
 import { Workspaces } from "./pages/Workspaces";
-import { MyProfile } from './pages/MyProfile'
+import { MyProfile } from "./pages/MyProfile";
+import { Boards } from "./pages/Boards";
 
 function App() {
   return (
@@ -19,8 +20,7 @@ function App() {
         <Route path="/UserManagement" element={<UserManagement />} />
         <Route path="/Workspaces" element={<Workspaces />} />
         <Route path="/MyProfile" element={<MyProfile />} />
-
-
+        <Route path="/Workspaces/:idEspacio/Boards/" element={<Boards />} />
       </Routes>
       <Toaster />
     </BrowserRouter>
@@ -28,3 +28,4 @@ function App() {
 }
 
 export default App;
+

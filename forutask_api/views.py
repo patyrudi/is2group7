@@ -26,7 +26,6 @@ class UsuarioView(viewsets.ModelViewSet):
     queryset = Usuario.objects.all()
     permission_classes = [IsAuthenticated]
 
-
 class EspacioDeTrabajoView(viewsets.ModelViewSet):
     serializer_class = EspacioDeTrabajoSerializer
     queryset = EspacioDeTrabajo.objects.all()
@@ -68,6 +67,21 @@ class UsuariosAsignadosView(viewsets.ModelViewSet):
     queryset = UsuariosAsignados.objects.all()
     permission_classes = [IsAuthenticated]
 
+
+class RegistroUsuario(generics.CreateAPIView):
+    queryset = Usuario.objects.all()
+    serializer_class = UsuarioSerializer
+    permission_classes = [AllowAny] 
+
+#Nuevo
+class ObtenerIDUsuario(APIView):
+    def get(self, request, username, format=None):
+        try:
+            usuario = Usuario.objects.get(username=username)
+            return Response({'idUsuario': usuario.idUsuario})
+        except Usuario.DoesNotExist:
+            return Response({'error': 'Usuario no encontrado'}, status=status.HTTP_404_NOT_FOUND)
+
 class CrearEspacioTrabajo(APIView):
     def post(self, request):
         serializer = EspacioDeTrabajoSerializer(data=request.data)
@@ -79,12 +93,29 @@ class CrearEspacioTrabajo(APIView):
                 idUser=request.user,
                 idEspacio=nuevo_espacio
             )
-            usuario_asignado.save()
-            
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class RegistroUsuario(generics.CreateAPIView):
-    queryset = Usuario.objects.all()
-    serializer_class = UsuarioSerializer
-    permission_classes = [AllowAny] 
+class CreateAssignedWorkspaceView(APIView):
+    def post(self, request):
+        idUser = request.data.get('idUser')
+        idEspacio = request.data.get('idEspacio')
+
+        if not idUser or not idEspacio:
+            return Response({'error': 'Faltan parámetros'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if UsuariosAsignados.objects.filter(idUser=idUser, idEspacio=idEspacio).exists():
+            return Response({'error': 'El usuario ya está asignado a este espacio'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Verificar existencia de usuario y espacio
+        if not (UsuariosAsignados.objects.filter(idUser=idUser).exists() and EspacioDeTrabajo.objects.filter(id=idEspacio).exists()):
+            return Response({'error': 'Usuario o espacio no encontrados'}, status=status.HTTP_404_NOT_FOUND)
+
+        nueva_asignacion = UsuariosAsignados.objects.create(
+            idUser=idUser,
+            idEspacio=idEspacio,
+            tipoUsuario=request.data.get('tipoUsuario'),
+            fechaAsignacion=request.data.get('fechaAsignacion', date.today().isoformat()),  # Default to today if not provided
+        )
+
+        return Response({'id': nueva_asignacion.id}, status=status.HTTP_201_CREATED)

@@ -11,3 +11,5 @@ export const deleteWorkspace = (idEspacio) => api.delete(`/espacios/${idEspacio}
 export const updateWorkspace = (idEspacio, workspace) => api.put(`/espacios/${idEspacio}`, workspace);
 
 export const getAllAssignedWorkspaces = () => api.get('/usuarios_asignados/');
+
+export const createAssignedWorkspaces = (workspace) => api.post('/usuarios_asignados/',workspace);
