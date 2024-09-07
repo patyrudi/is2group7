@@ -4,6 +4,7 @@ import {
   getAllAssignedWorkspaces,
   getWorkspace,
   createWorkspace,
+  createAssignedWorkspaces,
 } from "../api/workspaces.api";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
@@ -13,10 +14,12 @@ export function Workspaces() {
   const [workspaces, setWorkspaces] = useState([]);
   const [isCreating, setIsCreating] = useState(false);
   const { register, handleSubmit, reset } = useForm();
+  const toastperso = {style: {borderRadius: '10px',background: '#333',color: '#fff',}}
   const navigate = useNavigate();
 
   // Obtener el idUsuario desde localStorage
   const userId = localStorage.getItem("idUsuario");
+  console.log("User ID:", userId);
 
   const loadWorkspaces = async () => {
     try {
@@ -32,7 +35,7 @@ export function Workspaces() {
         filteredWorkspaces.map(async (assigned) => {
           const workspaceResponse = await getWorkspace(assigned.idEspacio);
           const workspace = workspaceResponse.data;
-          
+
           // Filtrar por estadoEspacio
           if (workspace.estadoEspacio) {
             return workspace;
@@ -42,8 +45,10 @@ export function Workspaces() {
       );
 
       // Eliminar valores nulos del array resultante
-      const activeWorkspaces = workspacesDetails.filter(workspace => workspace !== null);
-      
+      const activeWorkspaces = workspacesDetails.filter(
+        (workspace) => workspace !== null
+      );
+
       setWorkspaces(activeWorkspaces);
     } catch (error) {
       console.error("Error al cargar los espacios", error);
@@ -55,18 +60,55 @@ export function Workspaces() {
     loadWorkspaces();
   }, []);
 
-  const onSubmit = async (data) => {
+  const handleCreateWorkspace = async (data) => {
     try {
-      await createWorkspace({ nombreEspacio: data.nombreEspacio });
-      toast.success("Espacio creado exitosamente");
-      reset();
-      setIsCreating(false);
-      loadWorkspaces();
+      // Crear el nuevo espacio de trabajo
+      const workspaceResponse = await createWorkspace({ nombreEspacio: data.nombreEspacio });
+      console.log("Respuesta de la creación del espacio:", workspaceResponse.data);
+  
+      if (workspaceResponse.data && workspaceResponse.data.idEspacio) {
+        const nuevoEspacioId = workspaceResponse.data.idEspacio;
+  
+        // Aquí asignamos al creador como 'Owner'
+        const assignedWorkspaceData = {
+          accion: 'crear',
+          idUser: userId, // Asegúrate de que userId esté definido
+          idEspacio: nuevoEspacioId, // Usa el ID del nuevo espacio
+          tipoUsuario: "Owner",
+          fechaAsignacion: new Date().toISOString().split("T")[0], // Fecha actual
+        };
+  
+        // Enviar los datos para asignar al creador como 'Owner'
+        const assignResponse = await createAssignedWorkspaces(assignedWorkspaceData);
+  
+        toast.success("Espacio creado exitosamente");
+        reset();
+        setIsCreating(false);
+        loadWorkspaces();
+      } else {
+        toast.error("Error al crear el espacio de trabajo");
+      }
     } catch (error) {
-      console.error("Error al crear el espacio", error);
-      toast.error("Error al crear el espacio");
+      if (error.response) {
+        const status = error.response.status;
+        if (status === 404) {
+          toast.error("Espacio de trabajo no encontrado");
+        } else if (status === 400) {
+          toast.error("Error en los datos proporcionados");
+        } else {
+          toast.error("Ha ocurrido un error");
+        }
+      } else {
+        toast.error("Error de red o problema desconocido");
+      }
     }
   };
+  
+  const onSubmit = async (data) => {
+    await handleCreateWorkspace(data);
+  };
+  
+  
 
   return (
     <div>

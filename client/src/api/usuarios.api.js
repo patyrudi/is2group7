@@ -3,7 +3,7 @@ import api from './axiosConfig';
 
 export const getAllUsers = () => api.get('/usuarios/');
 
-export const getUser = (idUsuario) => api.get(`/usuarios/${idUsuario}`);
+export const getUser = (idUsuario) => api.get(`/usuarios/${idUsuario}/`);
 
 export const createUser = (user) => api.post('/usuarios/',user);
 

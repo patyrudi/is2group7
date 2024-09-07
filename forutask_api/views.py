@@ -82,40 +82,71 @@ class ObtenerIDUsuario(APIView):
         except Usuario.DoesNotExist:
             return Response({'error': 'Usuario no encontrado'}, status=status.HTTP_404_NOT_FOUND)
 
-class CrearEspacioTrabajo(APIView):
+
+class CrearEspacioTrabajoYAsignarUsuario(APIView):
     def post(self, request):
-        serializer = EspacioDeTrabajoSerializer(data=request.data)
-        if serializer.is_valid():
-            nuevo_espacio = serializer.save()
-            usuario_asignado = UsuariosAsignados.objects.create(
-                tipoUsuario="Owner",
-                fechaAsignacion=date.today(),
-                idUser=request.user,
-                idEspacio=nuevo_espacio
-            )
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        accion = request.data.get('accion')
+        print(f'{accion}')
 
-class CreateAssignedWorkspaceView(APIView):
-    def post(self, request):
-        idUser = request.data.get('idUser')
-        idEspacio = request.data.get('idEspacio')
+        if accion == 'crear':
+            # Crear un nuevo espacio de trabajo y asignar al creador como 'Owner'
+            idUser = request.data.get('idUser')
+            idEspacio = request.data.get('idEspacio')  # Usa ID en lugar de nombre
+            
+            if not idUser or not idEspacio:
+                return Response({'error': 'Faltan parámetros'}, status=status.HTTP_400_BAD_REQUEST)
 
-        if not idUser or not idEspacio:
-            return Response({'error': 'Faltan parámetros'}, status=status.HTTP_400_BAD_REQUEST)
+            # Verificar existencia del espacio de trabajo
+            if not EspacioDeTrabajo.objects.filter(idEspacio=idEspacio).exists():
+                return Response({'error': 'Espacio no encontrado'}, status=status.HTTP_404_NOT_FOUND)
 
-        if UsuariosAsignados.objects.filter(idUser=idUser, idEspacio=idEspacio).exists():
-            return Response({'error': 'El usuario ya está asignado a este espacio'}, status=status.HTTP_400_BAD_REQUEST)
+            # Crear la asignación del usuario como 'Owner'
+            asignacion_serializer = UsuariosAsignadosSerializer(data={
+                'idUser': idUser,
+                'idEspacio': idEspacio,
+                'tipoUsuario': 'Owner',
+                'fechaAsignacion': date.today().isoformat()
+            })
 
-        # Verificar existencia de usuario y espacio
-        if not (UsuariosAsignados.objects.filter(idUser=idUser).exists() and EspacioDeTrabajo.objects.filter(id=idEspacio).exists()):
-            return Response({'error': 'Usuario o espacio no encontrados'}, status=status.HTTP_404_NOT_FOUND)
+            if asignacion_serializer.is_valid():
+                asignacion_serializer.save()
+                return Response({'idEspacio': idEspacio}, status=status.HTTP_201_CREATED)
+            else:
+                return Response(asignacion_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        nueva_asignacion = UsuariosAsignados.objects.create(
-            idUser=idUser,
-            idEspacio=idEspacio,
-            tipoUsuario=request.data.get('tipoUsuario'),
-            fechaAsignacion=request.data.get('fechaAsignacion', date.today().isoformat()),  # Default to today if not provided
-        )
+        elif accion == 'invitar':
+            # Invitar a un usuario a un espacio de trabajo existente
+            idUser = request.data.get('idUser')
+            idEspacio = request.data.get('idEspacio')
 
-        return Response({'id': nueva_asignacion.id}, status=status.HTTP_201_CREATED)
+            if not idEspacio or not idUser:
+                return Response({'error': 'Faltan parámetros'}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Verificar existencia del espacio con el campo correcto
+            if not EspacioDeTrabajo.objects.filter(idEspacio=idEspacio).exists():
+                return Response({'error': 'Espacio no encontrado'}, status=status.HTTP_404_NOT_FOUND)
+
+            # Verificar si el usuario ya está asignado a este espacio
+            if UsuariosAsignados.objects.filter(idUser=idUser, idEspacio=idEspacio).exists():
+                return Response({'error': 'El usuario ya está asignado a este espacio'}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Verificar existencia del usuario
+            if not Usuario.objects.filter(idUsuario=idUser).exists():
+                return Response({'error': 'Usuario no encontrado'}, status=status.HTTP_404_NOT_FOUND)
+
+            # Crear la asignación del usuario
+            asignacion_serializer = UsuariosAsignadosSerializer(data={
+                'idUser': idUser,
+                'idEspacio': idEspacio,
+                'tipoUsuario': request.data.get('tipoUsuario', 'Invitado'),
+                'fechaAsignacion': request.data.get('fechaAsignacion', date.today().isoformat())
+            })
+
+            if asignacion_serializer.is_valid():
+                asignacion_serializer.save()
+                return Response(asignacion_serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                return Response(asignacion_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        else:
+            return Response({'error': 'Acción no válida'}, status=status.HTTP_400_BAD_REQUEST)
