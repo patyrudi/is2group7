@@ -1,11 +1,6 @@
 import { useEffect, useState } from "react";
 import { NavBar } from "../components/NavBar";
-import {
-  getAllAssignedWorkspaces,
-  getWorkspace,
-  createWorkspace,
-  createAssignedWorkspaces,
-} from "../api/workspaces.api";
+import { getAllAssignedWorkspaces, getWorkspace, createWorkspace, createAssignedWorkspaces} from "../api/workspaces.api";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -144,7 +139,7 @@ export function Workspaces() {
                 type="text"
                 placeholder="Nombre del Espacio"
                 {...register("nombreEspacio", { required: true })}
-                className="w-full p-2 mb-2 bg-gray-700 text-white"
+                className="w-full p-2 mb-2 bg-gray-700 text-black"
               />
               <button
                 type="submit"

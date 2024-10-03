@@ -8,6 +8,7 @@ import { Workspaces } from "./pages/Workspaces";
 import { MyProfile } from "./pages/MyProfile";
 import { Boards } from "./pages/Boards";
 import { UserFormPage } from "./pages/UserFormPage";
+import { Board } from "./pages/Board";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/Workspaces/:idEspacio/Boards/" element={<Boards />} />
         <Route path="/UserFormPage" element={<UserFormPage />} />
         <Route path="/User/:idUsuario" element={<UserFormPage />} />
+        <Route path="/Workspaces/:idEspacio/Boards/:idTablero" element={<Board />} />
       </Routes>
       <Toaster />
     </BrowserRouter>

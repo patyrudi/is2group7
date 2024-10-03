@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { NavBar } from "../components/NavBar";
 import { useParams } from "react-router-dom";
-import { getWorkspace, updateWorkspace, createAssignedWorkspaces } from "../api/workspaces.api";
+import { getWorkspace, updateWorkspace } from "../api/workspaces.api";
 import { useNavigate } from "react-router-dom";
 import { InviteUserForm } from "../components/InviteUserForm";
 import { toast } from "react-hot-toast";
+import { BoardsList } from '../components/BoardsList'
 
 export function Boards() {
   const params = useParams();
@@ -14,7 +15,7 @@ export function Boards() {
   const [workspaceName, setWorkspaceName] = useState(""); // Estado para el nombre del espacio
   const toastperso = {style: {borderRadius: '10px',background: '#333',color: '#fff',}}
   const navigate = useNavigate();
-    const toastStyles = {
+  const toastStyles = {
       container: {
         borderRadius: '10px',
         background: '#333',
@@ -176,7 +177,7 @@ export function Boards() {
     </div>
   ))}
   <div className="container mx-auto my-6 p-6 bg-transparent shadow-lg rounded-lg">
-    aqui van los tableros
+    < BoardsList />
   </div>
 </div>
   );

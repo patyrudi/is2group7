@@ -23,4 +23,3 @@ urlpatterns = [
     path('api/v1/crearespacio/', CrearEspacioTrabajoYAsignarUsuario.as_view(), name='crear_espacio_trabajo'),
     path('api/v1/usuario/<str:username>/id/', ObtenerIDUsuario.as_view(), name='obtener_id_usuario'),
 ]
-
