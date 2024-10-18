@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.db.models import JSONField
 
 # Create your models here.
 class UsuarioManager(BaseUserManager):
@@ -59,7 +60,7 @@ class Tablero(models.Model):
 
 class Lista(models.Model):
     idLista = models.AutoField(primary_key=True)
-    nombreLista = models.CharField(max_length=45)
+    nombreLista = models.CharField(max_length=45, default="lista generica")
     maxWip = models.IntegerField()
     idTablero = models.ForeignKey(Tablero, on_delete=models.CASCADE)
     idEstado = models.ForeignKey('Estado', on_delete=models.CASCADE)
@@ -79,12 +80,12 @@ class Estado(models.Model):
 class Tarjeta(models.Model):
     idTarjeta = models.AutoField(primary_key=True)
     nombreActividad = models.CharField(max_length=45)
-    descripcionTarjeta = models.TextField(blank=True)
+    descripcionTarjeta = models.TextField(blank=True, null=True)
     fechaCreacion = models.DateField()
-    fechaVencimiento = models.DateField()
-    etiqueta = models.CharField(max_length=45, blank=True)
+    fechaVencimiento = models.DateField(blank=True, null=True)
+    etiquetas = JSONField(blank=True, null=True, default=[])
     idLista = models.ForeignKey(Lista, on_delete=models.CASCADE)
-    idUsuarioAsignado = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    idUsuarioAsignado = models.ForeignKey(Usuario, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.nombreActividad

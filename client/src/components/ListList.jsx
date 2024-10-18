@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getAllLists, createList, updateList, deleteList } from "../api/lista.api.js";
-import { getAllCards } from "../api/tarjeta.api.js";
+import { getAllCards, updateCard } from "../api/tarjeta.api.js";
 import { toast } from "react-hot-toast";
 import { ListSettingsForm } from "./ListSettingsForm";
 import { CreateListForm } from "./CreateListForm";
-import { ListContainer } from "./ListContainer";
+import settingsIcon from '../images/settings.svg';
+import alertIcon from '../images/alert.svg';
+import { Card } from '../components/Card';
 
 export function ListList() {
   const [lists, setLists] = useState([]);
@@ -14,29 +16,15 @@ export function ListList() {
   const idTablero = params.idTablero;
   const navigate = useNavigate();
   const [isCreating, setIsCreating] = useState(false);
-  const [cardsCount, setCardsCount] = useState({});
 
   useEffect(() => {
     loadLists();
     loadCards();
-  }, [idTablero]); // Dependencia de idTablero
-
-  useEffect(() => {
-    const countCards = () => {
-      const count = {};
-      cards.forEach(card => {
-        count[card.idLista] = (count[card.idLista] || 0) + 1;
-      });
-      setCardsCount(count);
-    };
-
-    countCards();
-  }, [cards]);
+  }, [idTablero]);
 
   async function loadLists() {
     try {
       const res = await getAllLists();
-      // Filtrar listas por el idTablero actual
       const filteredLists = res.data.filter(list => list.idTablero === parseInt(idTablero));
       setLists(filteredLists);
     } catch (error) {
@@ -88,19 +76,50 @@ export function ListList() {
     );
   };
 
-  const handleCreateCard = async (cardData) => {
-    try {
-      const res = await createCard(cardData); // Aquí llamas a tu API para crear la tarjeta
-      setCards((prevCards) => [...prevCards, res.data]); // Agrega la nueva tarjeta al estado
-    } catch (error) {
-      console.error("Error creando la tarjeta:", error.message);
-    }
+  const handleUpdateCard = (updatedCard) => {
+    setCards((prevCards) => {
+      return prevCards.map(card =>
+        card.idTarjeta === updatedCard.idTarjeta ? updatedCard : card
+      );
+    });
+  };
+
+  const handleCardCreated = (newCard) => {
+    handleUpdateCard(newCard);
   };
 
   return (
     <div className="flex gap-4 overflow-x-auto">
       {lists.map((list) => (
-        <ListContainer key={list.idLista} list={list} cards={cards} onSettingsClick={handleSettingsClick} />
+        <div key={list.idLista} className={`${
+          (list.idEstado === 1 && cards.filter(card => card.idLista === list.idLista).length <= list.maxWip)
+            ? "bg-red-300"
+            : (list.idEstado === 2 && cards.filter(card => card.idLista === list.idLista).length <= list.maxWip)
+            ? "bg-blue-300"
+            : (list.idEstado === 3 && cards.filter(card => card.idLista === list.idLista).length <= list.maxWip)
+            ? "bg-green-300"
+            : "bg-red-600"
+        } shadow-md rounded-lg w-60 h-[600px] overflow-hidden`}>
+          <div className="bg-cyan-950 p-4 flex justify-between items-center">
+            <h2 className="text-xl font-bold text-white">{list.nombreLista}</h2>
+            {cards.filter(card => card.idLista === list.idLista).length > list.maxWip && (
+              <img src={alertIcon} alt="Alert" className="w-6 h-6 cursor-pointer" />
+            )}
+            <img
+              src={settingsIcon}
+              alt="Settings"
+              className="w-6 h-6 cursor-pointer"
+              onClick={() => handleSettingsClick(list)}
+            />
+          </div>
+          <div className="p-4 h-full">
+            <Card 
+              idLista={list.idLista} 
+              onCardCreated={handleCardCreated} 
+              onUpdateCard={handleUpdateCard} 
+            />
+          </div>
+        </div>
       ))}
 
       <button
@@ -114,12 +133,11 @@ export function ListList() {
                   const maxWip = document.getElementById("maxWip").value;
                   const idEstado = document.getElementById("idEstado").value;
 
-                  // Crear el objeto JSON para enviarlo a createList
                   const nuevaLista = {
                     "nombreLista": nombreLista,
                     "maxWip": parseInt(maxWip),
                     "idEstado": parseInt(idEstado),
-                    "idTablero": parseInt(idTablero) // Usar idTablero para la nueva lista
+                    "idTablero": parseInt(idTablero)
                   };
 
                   try {
