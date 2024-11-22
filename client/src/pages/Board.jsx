@@ -1,23 +1,24 @@
 import { useEffect, useState } from "react";
 import { NavBar } from "../components/NavBar";
 import { useParams, useNavigate } from "react-router-dom";
-import { ListList } from "../components/ListList";
-import { getBoard, updateBoard, deleteBoard } from "../api/tableros.api"; // Asegúrate de que estas funciones existan en tu API
+import { getBoard, updateBoard, deleteBoard } from "../api/tableros.api"; 
+import { ListAndCard } from "../components/ListAndCard";
 
 export function Board() {
-  const [boardName, setBoardName] = useState(""); // Nombre del tablero
-  const [isEditing, setIsEditing] = useState(false); // Estado para alternar edición
-  const [newBoardName, setNewBoardName] = useState(""); // Para manejar el input del nombre editado
+  const [boardName, setBoardName] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
+  const [newBoardName, setNewBoardName] = useState("");
   const params = useParams();
   const idTablero = params.idTablero;
-  const navigate = useNavigate(); // Para redirigir después de eliminar el tablero
+  const idEspacio = params.idEspacio;
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function loadBoard(idTablero) {
       try {
-        const response = await getBoard(idTablero); // Llama a la API para obtener el tablero
-        setBoardName(response.data.nombreTablero); // Actualiza el estado con el nombre del tablero
-        setNewBoardName(response.data.nombreTablero); // Inicializa el input con el nombre actual
+        const response = await getBoard(idTablero);
+        setBoardName(response.data.nombreTablero);
+        setNewBoardName(response.data.nombreTablero);
       } catch (error) {
         console.error("Error al cargar el tablero:", error);
       }
@@ -28,22 +29,20 @@ export function Board() {
     }
   }, [idTablero]);
 
-  // Función para manejar la actualización del nombre del tablero
   const handleUpdate = async () => {
     try {
       await updateBoard(idTablero, { nombreTablero: newBoardName });
-      setBoardName(newBoardName); // Actualiza el nombre mostrado
-      setIsEditing(false); // Termina la edición
+      setBoardName(newBoardName);
+      setIsEditing(false);
     } catch (error) {
       console.error("Error al actualizar el tablero:", error);
     }
   };
 
-  // Función para eliminar el tablero
   const handleDelete = async () => {
     try {
-      await deleteBoard(idTablero); // Llama a la API para eliminar el tablero
-      navigate("/Workspaces"); // Redirige a la página de Workspaces después de eliminar
+      await deleteBoard(idTablero);
+      navigate("/Workspaces");
     } catch (error) {
       console.error("Error al eliminar el tablero:", error);
     }
@@ -55,19 +54,31 @@ export function Board() {
       <div className="container mx-auto my-6 p-6 bg-transparent shadow-lg rounded-lg">
         {!isEditing ? (
           <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold text-white">
-              Tablero: {boardName}
-            </h1>
-            <div>
+            <h1 className="text-2xl font-bold text-white">Tablero: {boardName}</h1>
+            <div className="flex items-center">
               <button
                 onClick={() => setIsEditing(true)}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded"
               >
                 Editar nombre
               </button>
+
+              <button
+                onClick={() => navigate(`/Workspaces/${idEspacio}/Boards/${idTablero}/Dashboard/`)}
+                className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded ml-4"
+              >
+                Dashboard
+              </button>
+              <button
+              className="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded ml-4"
+              onClick={() => navigate(`/Workspaces/${idEspacio}/Boards/`)}
+              >
+                  Volver
+              </button>
+
               <button
                 onClick={handleDelete}
-                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-4"
+                className="bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 rounded ml-4"
               >
                 Eliminar tablero
               </button>
@@ -99,7 +110,7 @@ export function Board() {
         )}
       </div>
       <div className="container mx-auto my-6 p-6 bg-transparent shadow-lg rounded-lg">
-      <ListList />
+        <ListAndCard />
       </div>
     </div>
   );

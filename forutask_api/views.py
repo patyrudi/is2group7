@@ -8,18 +8,133 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from django.db import connection
 
 # Create your views here.
-class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
-    def validate(self, attrs):
-        data = super().validate(attrs)
-        
-        data['idUsuario'] = self.user.idUsuario
-        
-        return data
+class TareasPorEstadoEnTableroView(APIView):
+    permission_classes = [IsAuthenticated]
 
-class CustomTokenObtainPairView(TokenObtainPairView):
-    serializer_class = CustomTokenObtainPairSerializer
+    def get(self, request, idTablero):
+        query = '''
+            SELECT e.descripcionEstado, COUNT(t.idTarjeta) AS total
+            FROM forutask_api_tarjeta t
+            JOIN forutask_api_lista l ON t.idLista_id = l.idLista
+            JOIN forutask_api_estado e ON l.idEstado_id = e.idEstado
+            WHERE l.idTablero_id = %s
+            GROUP BY e.descripcionEstado
+        '''
+        with connection.cursor() as cursor:
+            cursor.execute(query, [idTablero])
+            result = cursor.fetchall()
+        
+        data = [{"estado": row[0], "total": row[1]} for row in result]
+        return Response(data)
+
+
+class TareasAtrasadasEnTableroView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, idTablero):
+        query = '''
+            SELECT COUNT(t.idTarjeta) AS total_atrasadas
+            FROM forutask_api_tarjeta t
+            JOIN forutask_api_lista l ON t.idLista_id = l.idLista
+            WHERE l.idTablero_id = %s 
+            AND t.fechaVencimiento < %s 
+            AND l.idEstado_id != 3
+        '''
+        with connection.cursor() as cursor:
+            cursor.execute(query, [idTablero, date.today()])
+            result = cursor.fetchone()
+        
+        data = {"total_atrasadas": result[0] if result else 0}
+        return Response(data)
+
+
+
+class TareasPorUsuarioEnTableroView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, idTablero):
+        query = '''
+            SELECT u.username, COUNT(t.idTarjeta) AS total
+            FROM forutask_api_tarjeta t
+            JOIN forutask_api_lista l ON t.idLista_id = l.idLista
+            JOIN forutask_api_usuario u ON t.idUsuarioAsignado_id = u.idUsuario
+            WHERE l.idTablero_id = %s
+            GROUP BY u.username
+        '''
+        with connection.cursor() as cursor:
+            cursor.execute(query, [idTablero])
+            result = cursor.fetchall()
+        
+        data = [{"username": row[0], "total": row[1]} for row in result]
+        return Response(data)
+
+
+
+
+class BuscarTarjetasView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        search_term = request.query_params.get('search_term', None)
+        if not search_term:
+            tarjetas = Tarjeta.objects.all()
+        else:
+            search_term = f"%{search_term}%"
+            query = '''
+                SELECT DISTINCT t.*
+                FROM forutask_api_tarjeta t
+                LEFT JOIN forutask_api_usuario u ON t.idUsuarioAsignado_id = u.idUsuario
+                WHERE JSON_SEARCH(t.etiquetas, 'all', %s, NULL, '$[*].nombreEtiqueta') IS NOT NULL
+                OR u.username LIKE %s
+            '''
+            tarjetas = Tarjeta.objects.raw(query, [search_term, search_term])
+
+        serializer = TarjetaSerializer(tarjetas, many=True)
+        return Response(serializer.data)
+    
+
+class BuscarTarjetasPorUsuarioView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        search_term = request.query_params.get('search_term', None)
+        if not search_term:
+            tarjetas = Tarjeta.objects.all()
+        else:
+            search_term = f"%{search_term}%"
+            query = '''
+                SELECT DISTINCT t.*
+                FROM forutask_api_tarjeta t
+                LEFT JOIN forutask_api_usuario u ON t.idUsuarioAsignado_id = u.idUsuario
+                WHERE u.username LIKE %s
+            '''
+            tarjetas = Tarjeta.objects.raw(query, [search_term])
+
+        serializer = TarjetaSerializer(tarjetas, many=True)
+        return Response(serializer.data)
+
+class BuscarTarjetasPorEtiquetasView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        search_term = request.query_params.get('search_term', None)
+        if not search_term:
+            tarjetas = Tarjeta.objects.all()
+        else:
+            search_term = f"%{search_term}%"
+            query = '''
+                SELECT DISTINCT t.*
+                FROM forutask_api_tarjeta t
+                WHERE JSON_SEARCH(t.etiquetas, 'all', %s, NULL, '$[*].nombreEtiqueta') IS NOT NULL
+            '''
+            tarjetas = Tarjeta.objects.raw(query, [search_term])
+
+        serializer = TarjetaSerializer(tarjetas, many=True)
+        return Response(serializer.data)
+
 
 class UsuarioView(viewsets.ModelViewSet):
     serializer_class = UsuarioSerializer
@@ -150,3 +265,14 @@ class CrearEspacioTrabajoYAsignarUsuario(APIView):
 
         else:
             return Response({'error': 'Acción no válida'}, status=status.HTTP_400_BAD_REQUEST)
+    
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        
+        data['idUsuario'] = self.user.idUsuario
+        
+        return data
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer

@@ -25,13 +25,13 @@ export function UsersList() {
   }
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold ">Users List</h2>
+    <div>
+      <div className="container mx-auto my-6 p-6 bg-transparent shadow-lg rounded-lg flex justify-between items-center">
+        <h2 className="text-2xl font-bold ">Lista de usuarios</h2>
         <button className="ml-auto bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700" onClick={handleClick}>Crear usuario</button>
       </div>
 
-      <div className="overflow-x-auto">
+      <div  className="container mx-auto my-6 p-6 bg-transparent shadow-lg rounded-lg">
         <table className="min-w-full bg-gray-900">
           <thead>
             <tr>

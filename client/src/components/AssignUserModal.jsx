@@ -3,9 +3,8 @@ import React, { useEffect, useState } from "react";
 import { getAllAssignedUsers } from "../api/usuarios_asignados.api.js";
 import { getUser } from "../api/usuarios.api.js";
 import { useParams } from "react-router-dom";
-import cerrarSvg from "../images/cerrar.svg"; // Importar el SVG
 
-export function AssignUserModal({ onClose, onAssignUser, onUpdateCard }) {
+export function AssignUserModal({ onClose, onAssignUser}) {
     const [usuarios, setUsuarios] = useState([]);
     const [usuarioSeleccionado, setUsuarioSeleccionado] = useState("");
     const [loading, setLoading] = useState(true);
@@ -47,7 +46,6 @@ export function AssignUserModal({ onClose, onAssignUser, onUpdateCard }) {
                 onClose();
             } catch (error) {
                 console.error("Error al asignar el usuario:", error.message);
-                // Aquí podrías mostrar un mensaje al usuario sobre el error
             }
         }
     };

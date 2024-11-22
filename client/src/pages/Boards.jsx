@@ -1,184 +1,174 @@
 import { useEffect, useState } from "react";
 import { NavBar } from "../components/NavBar";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { getWorkspace, updateWorkspace } from "../api/workspaces.api";
-import { useNavigate } from "react-router-dom";
 import { InviteUserForm } from "../components/InviteUserForm";
+import { BoardsList } from '../components/BoardsList';
 import { toast } from "react-hot-toast";
-import { BoardsList } from '../components/BoardsList'
 
 export function Boards() {
-  const params = useParams();
-  const idEspacio = params.idEspacio;
-  const [Workspaces, setWorkspaces] = useState([]);
-  const [editMode, setEditMode] = useState(false); // Estado para el modo de edición
-  const [workspaceName, setWorkspaceName] = useState(""); // Estado para el nombre del espacio
-  const toastperso = {style: {borderRadius: '10px',background: '#333',color: '#fff',}}
+  const { idEspacio } = useParams();
   const navigate = useNavigate();
+  const [workspace, setWorkspace] = useState(null);
+  const [editMode, setEditMode] = useState(false);
+  const [workspaceName, setWorkspaceName] = useState("");
+
   const toastStyles = {
-      container: {
-        borderRadius: '10px',
-        background: '#333',
-        color: '#fff',
-        padding: '15px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-      },
-      buttonContainer: {
-        marginLeft: '15px',
-        display: 'flex',
-        gap: '10px',
-      },
-      buttonYes: {
-        color: '#fff',
-        backgroundColor: 'red',
-        border: 'none',
-        padding: '5px 10px',
-        borderRadius: '5px',
-        cursor: 'pointer',
-      },
-      buttonNo: {
-        color: '#333',
-        backgroundColor: 'lightgray',
-        border: 'none',
-        padding: '5px 10px',
-        borderRadius: '5px',
-        cursor: 'pointer',
-      },
-    };
-  
+    container: {
+      borderRadius: '10px',
+      background: '#333',
+      color: '#fff',
+      padding: '15px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    buttonContainer: {
+      display: 'flex',
+      gap: '10px',
+    },
+    buttonYes: {
+      color: '#fff',
+      backgroundColor: 'red',
+      border: 'none',
+      padding: '5px 10px',
+      borderRadius: '5px',
+      cursor: 'pointer',
+    },
+    buttonNo: {
+      color: '#333',
+      backgroundColor: 'lightgray',
+      border: 'none',
+      padding: '5px 10px',
+      borderRadius: '5px',
+      cursor: 'pointer',
+    },
+  };
+
   useEffect(() => {
-    async function loadWorkspaces() {
+    async function loadWorkspace() {
       try {
-        const res = await getWorkspace(idEspacio);
-        setWorkspaces(Array.isArray(res.data) ? res.data : [res.data]);
-        setWorkspaceName(res.data.nombreEspacio); // Inicializar el nombre del espacio
+        const { data } = await getWorkspace(idEspacio);
+        setWorkspace(data);
+        setWorkspaceName(data.nombreEspacio);
       } catch (error) {
-        console.error("Error loading workspaces:", error);
+        console.error("Error loading workspace:", error);
       }
     }
-    loadWorkspaces();
+    loadWorkspace();
   }, [idEspacio]);
 
-  const handleDisableWorkspace = async (idEspacio) => {
+  const handleDisableWorkspace = async () => {
     toast((t) => (
       <span style={toastStyles.container}>
         ¿Estás seguro de deshabilitar el espacio de trabajo?
         <div style={toastStyles.buttonContainer}>
           <button
+            style={toastStyles.buttonYes}
             onClick={async () => {
               toast.dismiss(t.id);
               try {
                 await updateWorkspace(idEspacio, { estadoEspacio: false });
-                toast.success('Espacio deshabilitado', toastperso)
-
-                navigate("/workspaces"); // Redireccionar a la página de Workspaces
+                toast.success('Espacio deshabilitado', { style: toastStyles.container });
+                navigate("/workspaces");
               } catch (error) {
                 console.error("Error disabling workspace:", error);
               }
             }}
-            style={toastStyles.buttonYes}
           >
             Sí
           </button>
           <button
-            onClick={() => toast.dismiss(t.id)}
             style={toastStyles.buttonNo}
+            onClick={() => toast.dismiss(t.id)}
           >
             No
           </button>
         </div>
       </span>
-    ), {
-      style: {
-        borderRadius: '10px',
-        background: '#333',
-        color: '#fff',
-        padding: '15px',
-      },
-    });
-  };
-  
-
-  const handleEditWorkspace = () => {
-    setEditMode(true);
+    ));
   };
 
-  const handleSaveWorkspaceName = async (idEspacio) => {
+  const handleEditWorkspace = () => setEditMode(true);
+
+  const handleSaveWorkspaceName = async () => {
     try {
       await updateWorkspace(idEspacio, { nombreEspacio: workspaceName });
-      setWorkspaces((prevWorkspaces) =>
-        prevWorkspaces.map((workspace) =>
-          workspace.idEspacio === idEspacio
-            ? { ...workspace, nombreEspacio: workspaceName }
-            : workspace
-        )
-      );
-      setEditMode(false); // Salir del modo de edición
-      toast.success('Espacio modificado',toastperso)
+      setWorkspace((prevWorkspace) => ({
+        ...prevWorkspace,
+        nombreEspacio: workspaceName,
+      }));
+      setEditMode(false);
+      toast.success('Espacio modificado', { style: toastStyles.container });
     } catch (error) {
       console.error("Error updating workspace name:", error);
-      toast.error(`error al modificar ${error}`,toastperso)
+      toast.error(`Error al modificar: ${error.message}`, { style: toastStyles.container });
     }
   };
 
+  if (!workspace) return <div>Cargando...</div>;
+
   return (
-<div>
-  <NavBar />
-  {Workspaces.map(workspace => (
-    <div key={workspace.idEspacio} className="container mx-auto my-6 p-6 bg-transparent shadow-lg rounded-lg">
-      
-      {/* Contenedor del título, botones y formulario de invitación */}
-      <div className="flex justify-between items-center">
-        {/* Si estamos en modo de edición, mostrar un input, de lo contrario, mostrar el título */}
-        {editMode ? (
-          <input 
-            type="text" 
-            value={workspaceName} 
-            onChange={(e) => setWorkspaceName(e.target.value)} 
-            className="text-2xl font-bold text-black px-2 py-1 rounded"
-          />
-        ) : (
-          <h1 className="text-2xl font-bold text-white">Workspace {workspace.nombreEspacio}</h1>
-        )}
-        
-        {/* Contenedor para botones y formulario */}
-        <div className="flex items-center space-x-4">
+    <div>
+      <NavBar />
+      <div className="container mx-auto my-6 p-6 bg-transparent shadow-lg rounded-lg">
+        <div className="flex justify-between items-center">
           {editMode ? (
-            <button 
-              className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-              onClick={() => handleSaveWorkspaceName(workspace.idEspacio)}
-            >
-              Guardar
-            </button>
+            <input
+              type="text"
+              value={workspaceName}
+              onChange={(e) => setWorkspaceName(e.target.value)}
+              className="text-2xl font-bold text-black px-2 py-1 rounded"
+            />
           ) : (
-            <>
-              <button 
-                className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
-                onClick={() => handleDisableWorkspace(workspace.idEspacio)}
-              >
-                Deshabilitar espacio
-              </button>
-              <button 
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                onClick={handleEditWorkspace}
-              >
-                Modificar espacio
-              </button>
-            </>
+            <h1 className="text-2xl font-bold text-white">
+              Workspace: {workspace.nombreEspacio}
+            </h1>
           )}
 
-          {/* Componente para invitar usuarios */}
-          <InviteUserForm idEspacio={workspace.idEspacio} />
+          <div className="flex items-center space-x-4">
+            {editMode ? (
+              <button
+                className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+                onClick={handleSaveWorkspaceName}
+              >
+                Guardar
+              </button>
+            ) : (
+              <>
+                <button
+                 className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-400"
+
+
+                  onClick={handleDisableWorkspace}
+                >
+                  Deshabilitar espacio
+                </button>
+                <button
+                 className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-500"
+
+
+                  onClick={handleEditWorkspace}
+                >
+                  Modificar espacio
+                </button>
+                <button
+                className="bg-gray-600 text-white py-2 px-4 rounded hover:bg-gray-500"
+
+
+                  onClick={() => navigate(`/workspaces`)}
+                >
+                  Volver
+                </button>
+              </>
+            )}
+            <InviteUserForm idEspacio={workspace.idEspacio} />
+          </div>
         </div>
       </div>
-      
+      <div className="container mx-auto my-6 p-6 bg-transparent shadow-lg rounded-lg">
+        <BoardsList />
+      </div>
     </div>
-  ))}
-  <div className="container mx-auto my-6 p-6 bg-transparent shadow-lg rounded-lg">
-    < BoardsList />
-  </div>
-</div>
   );
 }

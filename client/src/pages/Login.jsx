@@ -5,89 +5,103 @@ import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 export function Login() {
-  const toastperso = {style: {borderRadius: '10px',background: '#333',color: '#fff',}}
+  const toastperso = {
+    style: {
+      borderRadius: "10px",
+      background: "#222",
+      color: "#fff",
+    },
+  };
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       await login(username, password);
-      toast.success("Sesion iniciada",toastperso);
+      toast.success("Sesión iniciada", toastperso);
       navigate("/MainMenu");
     } catch (error) {
-      toast.error("Error de autenticación, credenciales incorrectas",toastperso)
+      toast.error("Error de autenticación, credenciales incorrectas", toastperso);
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen text-white">
-      <div className="w-full max-w-md p-8 bg-gray-800 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold mb-6 text-center bg-gradient-to-r from-blue-400 to-pink-200 bg-clip-text text-transparent">
-          4U Task
-        </h2>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label
-              htmlFor="username"
-              className="block text-sm font-medium mb-2"
-            >
-              Nombre de Usuario
-            </label>
-            <input
-              type="text"
-              id="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="username"
-              className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-          <div className="mb-6">
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium mb-2"
-            >
-              Contraseña
-            </label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="********"
-              className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-          <button
-            type="submit"
-            className="w-full py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            Iniciar sesión
-          </button>
-          <div className="text-center">o</div>
-          <button
-            type="button"
-            className="w-full py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded focus:outline-none focus:ring-2 focus:ring-blue-500 mt-2 flex items-center justify-center"
-          >
-            <span>Iniciar sesión con Google</span>
-            <span className="ml-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                className="bi bi-google"
-                viewBox="0 0 16 16"
+    <div
+      className="flex items-center justify-center min-h-screen"
+      style={{
+        background: "linear-gradient(to right, #2a52be, #99c9f5)",
+      }}
+    >
+      <div className="flex w-full max-w-4xl shadow-xl rounded-lg overflow-hidden bg-white bg-opacity-10 backdrop-blur-md">
+        {/* Left side with image and text */}
+        <div className="w-1/2 flex flex-col justify-center items-center bg-blue-800 bg-opacity-80 p-8">
+          <img src="/public/4u.png" alt="Decorative bird" className="w-48 mx-auto mb-6" />
+          <h2 className="text-4xl font-extrabold text-white mb-4 tracking-wider">
+            4UTask
+          </h2>
+          <p className="text-base text-gray-300">Simplifica, organiza, alcanza.</p>
+        </div>
+        {/* Right side with login form */}
+        <div className="w-1/2 p-8 bg-white bg-opacity-10">
+          <h2 className="text-white text-3xl font-bold mb-8 text-center">
+            Bienvenido a 4UTask
+          </h2>
+          <form onSubmit={handleSubmit}>
+            <div className="mb-6">
+              <label
+                htmlFor="username"
+                className="block text-base font-semibold text-gray-200 mb-2"
               >
-                <path d="M15.545 6.558a9.4 9.4 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.7 7.7 0 0 1 5.352 2.082l-2.284 2.284A4.35 4.35 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.8 4.8 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.7 3.7 0 0 0 1.599-2.431H8v-3.08z" />
-              </svg>
-            </span>
-          </button>
-        </form>
-        <NavigationRegister />
+                Usuario
+              </label>
+              <input
+                type="text"
+                id="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Ingresa tu usuario"
+                className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-400 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                required
+              />
+            </div>
+            <div className="mb-8">
+              <label
+                htmlFor="password"
+                className="block text-base font-semibold text-gray-200 mb-2"
+              >
+                Contraseña
+              </label>
+              <input
+                type="password"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="********"
+                className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-400 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              className="w-full py-3 bg-blue-600 text-white font-bold rounded-lg text-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            >
+              Iniciar Sesión
+            </button>
+            <div className="text-center text-gray-400 my-6">o</div>
+            <button
+              type="button"
+              className="w-full py-3 bg-blue-500 text-white font-bold rounded-lg text-lg shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+            >
+              Iniciar sesión con Google
+            </button>
+          </form>
+          <div className="mt-6">
+            <NavigationRegister />
+          </div>
+        </div>
       </div>
     </div>
   );

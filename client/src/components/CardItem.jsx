@@ -1,7 +1,7 @@
 export function CardItem({ card, onClick }) {
     return (
       <div
-        className="border-black p-2 rounded hover:bg-gray-100 cursor-pointer text-black border"
+        className="border-gray-700 bg-white p-2 rounded hover:bg-gray-300 cursor-pointer text-black border"
         onClick={onClick}
       >
         {/* Sección de etiquetas */}

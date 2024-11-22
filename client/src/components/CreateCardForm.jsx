@@ -36,7 +36,7 @@ export function CreateCardForm({ onCancel, idLista, onCardCreated }) {
         placeholder="Nombre de la actividad"
         value={nombreActividad}
         onChange={(e) => setNombreActividad(e.target.value)}
-        className="border p-2 rounded"
+        className="border p-2 rounded text-black"
         required
       />
       <div className="flex justify-end gap-2">

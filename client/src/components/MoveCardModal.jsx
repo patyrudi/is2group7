@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import { getAllLists } from "../api/lista.api.js"; 
-import { updateCard } from "../api/tarjeta.api.js"; 
+import { getAllLists } from "../api/lista.api.js";
+import { useParams } from "react-router-dom";
 
-export function MoveCardModal({ cardData, onClose, onMoveCard }) {
+export function MoveCardModal({ idLista, onClose, onMoveCard }) {
   const [listas, setListas] = useState([]); // Estado para las listas
   const [selectedListId, setSelectedListId] = useState(""); // Estado para la lista seleccionada
-
+  const params = useParams()
+  const idTablero = params.idTablero;
+  console.log(idTablero);
   // Función para obtener todas las listas al cargar el componente
   useEffect(() => {
     const fetchListas = async () => {
@@ -17,37 +19,22 @@ export function MoveCardModal({ cardData, onClose, onMoveCard }) {
       }
     };
 
-    fetchListas(); // Llama a la función para obtener listas
+    fetchListas();
   }, []);
 
-  // Función para manejar el movimiento de la tarjeta
   const handleMove = async () => {
     if (selectedListId) {
-      const updatedCardData = {
-        ...cardData,
-        idLista: parseInt(selectedListId, 10), // Convierte el ID de la lista a un entero
-      };
-  
-      console.log("Moving card:", updatedCardData); // Muestra los datos de la tarjeta que se moverá
-  
+    
       try {
-        await updateCard(cardData.idTarjeta, updatedCardData); // Actualiza la tarjeta en la nueva lista
-        onMoveCard(cardData.idTarjeta, updatedCardData.idLista); // Notifica que la tarjeta fue movida
-        handleClose(); // Cierra el modal después de mover la tarjeta
+        console.log(selectedListId);
+        await onMoveCard(selectedListId);
+        onClose();
       } catch (error) {
-        console.error("Error updating card:", error.message); // Manejo de errores
+        console.error("Error updating card:", error.message);
       }
-    } else {
-      console.error("No list selected"); // Mensaje si no se ha seleccionado una lista
-    }
+    } 
   };
   
-
-  // Función para cerrar el modal y restablecer el estado
-  const handleClose = () => {
-    setSelectedListId(""); // Restablecer el ID seleccionado
-    onClose(); // Cierra el modal
-  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 text-white">
@@ -58,21 +45,21 @@ export function MoveCardModal({ cardData, onClose, onMoveCard }) {
           Selecciona una lista:
         </label>
         <select
-            id="lista"
-            value={selectedListId}
-            onChange={(e) => setSelectedListId(e.target.value)} // Actualiza el estado con la lista seleccionada
-            className="border rounded p-2 w-full mb-4 bg-gray-700 text-white"
-            >
-            <option value="" disabled>
-                Elige una lista
-            </option>
-            {listas.map((lista) => (
-                <option key={lista.idLista} value={lista.idLista}>
-                {`${lista.idLista} - ${lista.nombreLista}`}
-                </option>
+          id="lista"
+          value={selectedListId}
+          onChange={(e) => setSelectedListId(e.target.value)} // Actualiza el estado con la lista seleccionada
+          className="border rounded p-2 w-full mb-4 bg-gray-700 text-white">
+          <option value="" disabled>
+            Elige una lista
+          </option>
+          {listas
+            .filter((lista) => lista.idLista !== idLista && lista.idTablero == idTablero ) // Filtra la lista actual de la tarjeta
+            .map((lista) => (
+              <option key={lista.idLista} value={lista.idLista}>
+                {`${lista.nombreLista}`}
+              </option>
             ))}
         </select>
-
 
         <div className="flex justify-end">
           <button
@@ -82,7 +69,7 @@ export function MoveCardModal({ cardData, onClose, onMoveCard }) {
             Mover
           </button>
           <button
-            onClick={handleClose} // Cierra el modal
+            onClick={onClose} // Cierra el modal
             className="bg-gray-600 text-white rounded px-4 py-2"
           >
             Cancelar

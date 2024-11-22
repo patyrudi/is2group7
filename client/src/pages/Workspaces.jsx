@@ -108,8 +108,17 @@ export function Workspaces() {
   return (
     <div>
       <NavBar />
-      <div className="p-6">
+      <div className="container mx-auto my-6 p-6 bg-transparent shadow-lg rounded-lg flex justify-between items-center">
         <h2 className="text-2xl font-bold mb-4">Workspaces</h2>
+        <button
+                            className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow hover:bg-blue-700 transition duration-300"
+                            onClick={() => navigate(`/MainMenu/`)}
+                        >
+                            Menu principal
+                    </button>
+        
+      </div>
+      <div className="container mx-auto my-6 p-6 bg-transparent shadow-lg rounded-lg">
         <div className="grid grid-cols-3 gap-4">
           {workspaces.map((workspace) => (
             <div
@@ -139,7 +148,7 @@ export function Workspaces() {
                 type="text"
                 placeholder="Nombre del Espacio"
                 {...register("nombreEspacio", { required: true })}
-                className="w-full p-2 mb-2 bg-gray-700 text-black"
+                className="w-full p-2 mb-2 bg-white text-black"
               />
               <button
                 type="submit"

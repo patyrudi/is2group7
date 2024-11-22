@@ -2,7 +2,13 @@ from django.urls import path, include
 from rest_framework import routers
 from rest_framework.documentation import include_docs_urls
 from rest_framework_simplejwt.views import TokenRefreshView
-from .views import UsuarioView, EspacioDeTrabajoView, TableroView, ListaView, EstadoView, TarjetaView, TaskView, UsuariosAsignadosView, RegistroUsuario, CustomTokenObtainPairView, ObtenerIDUsuario, CrearEspacioTrabajoYAsignarUsuario
+from .views import (BuscarTarjetasView, UsuarioView, EspacioDeTrabajoView, 
+                    TableroView, ListaView, EstadoView, TarjetaView, 
+                    TaskView, UsuariosAsignadosView, RegistroUsuario, 
+                    CustomTokenObtainPairView, ObtenerIDUsuario, CrearEspacioTrabajoYAsignarUsuario,
+                    TareasPorEstadoEnTableroView, TareasAtrasadasEnTableroView, TareasPorUsuarioEnTableroView,
+                    BuscarTarjetasPorUsuarioView, BuscarTarjetasPorEtiquetasView
+                    )
 
 router = routers.DefaultRouter()
 router.register(r'usuarios', UsuarioView)
@@ -22,4 +28,10 @@ urlpatterns = [
     path('api/registro/', RegistroUsuario.as_view(), name='registro_usuario'),
     path('api/v1/crearespacio/', CrearEspacioTrabajoYAsignarUsuario.as_view(), name='crear_espacio_trabajo'),
     path('api/v1/usuario/<str:username>/id/', ObtenerIDUsuario.as_view(), name='obtener_id_usuario'),
+    path('api/v1/buscar_tarjetas/', BuscarTarjetasView.as_view(), name='buscar_tarjetas'),
+    path('api/v1/tareas_estado/<int:idTablero>/', TareasPorEstadoEnTableroView.as_view(), name="tareas_estado"),
+    path('api/v1/tareas_atrasadas/<int:idTablero>/', TareasAtrasadasEnTableroView.as_view(), name="tareas_atrasadas"),
+    path('api/v1/tareas_por_usuario/<int:idTablero>/', TareasPorUsuarioEnTableroView.as_view(), name="tareas_por_usuario"),
+    path('api/v1/buscar_tarjetas_por_usuario/', BuscarTarjetasPorUsuarioView.as_view(), name='buscar_tarjetas_por_usuario'),
+    path('api/v1/buscar_tarjetas_por_etiquetas/', BuscarTarjetasPorEtiquetasView.as_view(), name='buscar_tarjetas_por_etiquetas'),
 ]

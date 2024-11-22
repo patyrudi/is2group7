@@ -100,7 +100,7 @@ export function UserFormPage() {
   return (
     <div>
       <NavBar />
-      <div className="flex flex-col items-center justify-center min-h-screen text-white">
+      <div className="flex flex-col items-center justify-center min-h-screen text-white bg-transparent shadow-lg rounded-lg">
         <h2 className="text-2xl font-bold mb-6 text-center bg-gradient-to-r from-blue-400 to-pink-200 bg-clip-text text-transparent">
           {idUsuario ? "Editar Usuario" : "Crear Cuenta"}
         </h2>

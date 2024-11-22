@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 body {
-  background: linear-gradient(to right, #4f46e5, #06b6d4);
-  color: white;
+  background: linear-gradient(to right, #2a52be, #99c9f5); /* Fondo con degradado */
+  color: #ffffff; /* Texto en blanco para mejor contraste */
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
 }
