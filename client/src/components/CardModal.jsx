@@ -80,17 +80,63 @@ const fetchUserName = async () => {
 };
 
 const handleConfirmDeleteCard = async () => {
-  const confirmation = window.confirm("¿Estás seguro de que deseas eliminar esta tarjeta?");
+  // Mostrar el modal de confirmación
+  const confirmation = await showConfirmationModal();
   if (confirmation) {
     try {
-      await deleteCard(card.idTarjeta);
-      toast.success("Tarjeta eliminada correctamente.", toastperso);
-      onClose();
+      // Usamos card.idTarjeta directamente desde el scope
+      await deleteCard(card.idTarjeta); // Eliminar la tarjeta
+      toast.success("Tarjeta eliminada correctamente.", toastperso); // Mensaje de éxito
+      onClose(); // Cerrar o realizar alguna acción adicional
     } catch (error) {
-      console.error("Error eliminando tarjeta:", error.message);
-      toast.error("Error al eliminar la tarjeta.");
+      console.error("Error eliminando tarjeta:", error.message); // Log del error
+      toast.error("Error al eliminar la tarjeta."); // Mensaje de error
     }
   }
+};
+
+// Función para mostrar el modal de confirmación
+const showConfirmationModal = () => {
+  return new Promise((resolve) => {
+    // Crear el modal dinámicamente
+    const modal = document.createElement("div");
+    modal.className = "fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50";
+
+    modal.innerHTML = `
+      <div class="bg-gray-800 text-white rounded-lg shadow-lg p-6 w-96">
+        <h2 class="text-lg font-bold mb-4">Confirmar eliminación</h2>
+        <p class="text-gray-200 mb-6">¿Estás seguro de que deseas eliminar esta tarjeta? Esta acción no se puede deshacer.</p>
+        <div class="flex justify-end space-x-4">
+          <button id="cancelButton" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-500">
+            Cancelar
+          </button>
+          <button id="confirmButton" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-500">
+            Eliminar
+          </button>
+        </div>
+      </div>
+
+    `;
+
+    // Agregar el modal al DOM
+    document.body.appendChild(modal);
+
+    // Escuchar eventos de botones
+    const cancelButton = document.getElementById("cancelButton");
+    const confirmButton = document.getElementById("confirmButton");
+
+    // Acción de cancelar
+    cancelButton.addEventListener("click", () => {
+      document.body.removeChild(modal);
+      resolve(false); // El usuario cancela
+    });
+
+    // Acción de confirmar
+    confirmButton.addEventListener("click", () => {
+      document.body.removeChild(modal);
+      resolve(true); // El usuario confirma
+    });
+  });
 };
 
 const guardarDescripcion = async (nuevaDescripcion) => {
@@ -198,7 +244,7 @@ const handleMoveCard = async (newListId) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 text-white">
-      <div className="bg-gray-700 p-6 rounded shadow-lg w-full max-w-xl relative flex">
+      <div className="bg-gray-800 p-6 rounded shadow-lg w-full max-w-xl relative flex">
         <div className="flex-1">
           <span
             onClick={onClose}
