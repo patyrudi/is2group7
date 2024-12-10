@@ -90,13 +90,6 @@ export function Login() {
             >
               Iniciar Sesión
             </button>
-            <div className="text-center text-gray-400 my-6">o</div>
-            <button
-              type="button"
-              className="w-full py-3 bg-blue-500 text-white font-bold rounded-lg text-lg shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
-            >
-              Iniciar sesión con Google
-            </button>
           </form>
           <div className="mt-6">
             <NavigationRegister />
