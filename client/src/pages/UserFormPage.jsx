@@ -98,105 +98,107 @@ export function UserFormPage() {
   }
 
   return (
-    <div>
-      <NavBar />
-      <div className="flex flex-col items-center justify-center min-h-screen text-white bg-transparent shadow-lg rounded-lg">
-        <h2 className="text-2xl font-bold mb-6 text-center bg-gradient-to-r from-blue-400 to-pink-200 bg-clip-text text-transparent">
-          {idUsuario ? "Editar Usuario" : "Crear Cuenta"}
-        </h2>
-        <form onSubmit={handleSubmit} className="w-full max-w-md">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="mb-4">
-              <label htmlFor="nombreUsuario" className="block text-sm font-medium mb-2">Nombre</label>
+<div>
+  <NavBar />
+  <div className="flex flex-col items-center justify-center min-h-screen text-gray-700 bg-white">
+    <h2 className="text-2xl font-bold mb-6 text-center text-gray-700">
+      {idUsuario ? "Editar Usuario" : "Crear Cuenta"}
+    </h2>
+    <form onSubmit={handleSubmit} className="w-full max-w-md bg-white p-6 rounded-lg shadow-lg">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="mb-4">
+          <label htmlFor="nombreUsuario" className="block text-sm font-medium mb-2 text-gray-600">Nombre</label>
+          <input
+            type="text"
+            id="nombreUsuario"
+            value={userData.nombreUsuario}
+            onChange={handleInputChange}
+            placeholder="Nombre"
+            className="w-full p-2 bg-gray-100 border border-gray-300 rounded text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#7b60b0]"
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="apellidoUsuario" className="block text-sm font-medium mb-2 text-gray-600">Apellido</label>
+          <input
+            type="text"
+            id="apellidoUsuario"
+            value={userData.apellidoUsuario}
+            onChange={handleInputChange}
+            placeholder="Apellido"
+            className="w-full p-2 bg-gray-100 border border-gray-300 rounded text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#7b60b0]"
+          />
+        </div>
+        <div className="mb-4 col-span-2 md:col-span-1">
+          <label htmlFor="correoUsuario" className="block text-sm font-medium mb-2 text-gray-600">Correo</label>
+          <input
+            type="email"
+            id="correoUsuario"
+            value={userData.correoUsuario}
+            onChange={handleInputChange}
+            placeholder="correo@ejemplo.com"
+            className="w-full p-2 bg-gray-100 border border-gray-300 rounded text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#7b60b0]"
+          />
+        </div>
+        <div className="mb-4 col-span-2 md:col-span-1">
+          <label htmlFor="username" className="block text-sm font-medium mb-2 text-gray-600">Nombre de Usuario</label>
+          <input
+            type="text"
+            id="username"
+            value={userData.username}
+            onChange={handleInputChange}
+            placeholder="Nombre de Usuario"
+            className="w-full p-2 bg-gray-100 border border-gray-300 rounded text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#7b60b0]"
+          />
+        </div>
+        {!idUsuario && (
+          <>
+            <div className="mb-6 col-span-2 md:col-span-1">
+              <label htmlFor="password" className="block text-sm font-medium mb-2 text-gray-600">Contraseña</label>
               <input
-                type="text"
-                id="nombreUsuario"
-                value={userData.nombreUsuario}
+                type="password"
+                id="password"
+                value={userData.password}
                 onChange={handleInputChange}
-                placeholder="Nombre"
-                className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="********"
+                className="w-full p-2 bg-gray-100 border border-gray-300 rounded text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#7b60b0]"
               />
             </div>
-            <div className="mb-4">
-              <label htmlFor="apellidoUsuario" className="block text-sm font-medium mb-2">Apellido</label>
+            <div className="mb-6 col-span-2 md:col-span-1">
+              <label htmlFor="confirm_password" className="block text-sm font-medium mb-2 text-gray-600">Repetir Contraseña</label>
               <input
-                type="text"
-                id="apellidoUsuario"
-                value={userData.apellidoUsuario}
+                type="password"
+                id="confirm_password"
+                value={userData.confirm_password}
                 onChange={handleInputChange}
-                placeholder="Apellido"
-                className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="********"
+                className="w-full p-2 bg-gray-100 border border-gray-300 rounded text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#7b60b0]"
               />
             </div>
-            <div className="mb-4 col-span-2 md:col-span-1">
-              <label htmlFor="correoUsuario" className="block text-sm font-medium mb-2">Correo</label>
-              <input
-                type="email"
-                id="correoUsuario"
-                value={userData.correoUsuario}
-                onChange={handleInputChange}
-                placeholder="correo@ejemplo.com"
-                className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            <div className="mb-4 col-span-2 md:col-span-1">
-              <label htmlFor="username" className="block text-sm font-medium mb-2">Nombre de Usuario</label>
-              <input
-                type="text"
-                id="username"
-                value={userData.username}
-                onChange={handleInputChange}
-                placeholder="Nombre de Usuario"
-                className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            {!idUsuario && (
-              <>
-                <div className="mb-6 col-span-2 md:col-span-1">
-                  <label htmlFor="password" className="block text-sm font-medium mb-2">Contraseña</label>
-                  <input
-                    type="password"
-                    id="password"
-                    value={userData.password}
-                    onChange={handleInputChange}
-                    placeholder="********"
-                    className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-                <div className="mb-6 col-span-2 md:col-span-1">
-                  <label htmlFor="confirm_password" className="block text-sm font-medium mb-2">Repetir Contraseña</label>
-                  <input
-                    type="password"
-                    id="confirm_password"
-                    value={userData.confirm_password}
-                    onChange={handleInputChange}
-                    placeholder="********"
-                    className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-              </>
-            )}
-          </div>
-          <button
-            type="submit"
-            className="w-full py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded focus:outline-none focus:ring-2 focus:ring-blue-500 mt-6"
-          >
-            {idUsuario ? "Guardar" : "Crear Cuenta"}
-          </button>
-        </form>
-
-        {idUsuario && (
-          <div className="w-full max-w-md mt-4">
-            <button
-              type="button"
-              onClick={handleDeleteUser}
-              className="w-full py-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded focus:outline-none focus:ring-2 focus:ring-red-500 mt-6"
-            >
-              Eliminar
-            </button>
-          </div>
+          </>
         )}
       </div>
-    </div>
+      <button
+        type="submit"
+        className="w-full py-2 bg-[#7b60b0] hover:bg-[#9a7bc4] text-white font-semibold rounded focus:outline-none focus:ring-2 focus:ring-[#7b60b0] mt-6"
+      >
+        {idUsuario ? "Guardar" : "Crear Cuenta"}
+      </button>
+      
+    </form>
+
+    {idUsuario && (
+      <div className="w-full max-w-md mt-4">
+        <button
+          type="button"
+          onClick={handleDeleteUser}
+          className="w-full py-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded focus:outline-none focus:ring-2 focus:ring-red-500 mt-6"
+        >
+          Eliminar
+        </button>
+      </div>
+    )}
+  </div>
+</div>
+
   );
 }

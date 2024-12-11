@@ -3,9 +3,10 @@
 @tailwind utilities;
 
 body {
-  background: linear-gradient(to right, #2a52be, #99c9f5); /* Fondo con degradado */
+  background: #F9FAFB; /* Equivalente a bg-gray-50 */
   color: #ffffff; /* Texto en blanco para mejor contraste */
   font-family: 'Arial', sans-serif;
   margin: 0;
   padding: 0;
+  min-height: 100vh; /* Asegura que el cuerpo ocupe toda la pantalla */
 }

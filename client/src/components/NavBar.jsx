@@ -18,22 +18,61 @@ export function NavBar() {
     };
 
     return (
-<nav className="bg-blue-950 p-4">
-    <div className="container mx-auto flex justify-between items-center">
-        <Link to="/MainMenu" className="text-white text-lg font-bold hover:text-gray-400">4UTask</Link>
-        {isAuthenticated ? (
-            <>
-                <Link to="/MainMenu" className="text-gray-400 hover:text-white">Home</Link>
-                <Link to="/Workspaces" className="text-gray-400 hover:text-white">My Workspaces</Link>
-                <Link to="/UserManagement" className="text-gray-400 hover:text-white">Users Management</Link>
-                <Link to="/MyProfile" className="text-gray-400 hover:text-white">My profile</Link>
-                <button onClick={handleLogout} className="text-gray-400 hover:text-white">Logout</button>
-            </>
-        ) : (
-            <Link to="/login" className="text-gray-400 hover:text-white">Login</Link>
-        )}
-    </div>
+<nav style={{ backgroundColor: '#7b60b0' }} className="h-16 shadow-md py-4">
+  <div className="container mx-auto flex justify-between items-center px-6">
+    {/* Logo */}
+    <Link
+      to="/MainMenu"
+      className="text-white text-lg font-bold hover:text-[#0d9488] transition duration-300"
+    >
+      4UTask
+    </Link>
+
+    {/* Links de navegación */}
+    {isAuthenticated ? (
+      <>
+        <Link
+          to="/MainMenu"
+          className="text-white font-medium hover:text-[#4a5da8] transition duration-300"
+        >
+          Home
+        </Link>
+        <Link
+          to="/Workspaces"
+          className="text-white  font-medium hover:text-[#4a5da8] transition duration-300"
+        >
+          My Workspaces
+        </Link>
+        <Link
+          to="/UserManagement"
+          className="text-white  font-medium hover:text-[#4a5da8] transition duration-300"
+        >
+          Users Management
+        </Link>
+        <Link
+          to="/MyProfile"
+          className="text-white font-medium hover:text-[#4a5da8] transition duration-300"
+        >
+          My Profile
+        </Link>
+        <button
+          onClick={handleLogout}
+          className="text-white  font-medium hover:text-[#4a5da8] transition duration-300"
+        >
+          Logout
+        </button>
+      </>
+    ) : (
+      <Link
+        to="/login"
+        className="text-white font-medium hover:text-[#4a5da8] transition duration-300"
+      >
+        Login
+      </Link>
+    )}
+  </div>
 </nav>
+
 
     );
 }

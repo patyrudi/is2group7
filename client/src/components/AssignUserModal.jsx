@@ -56,12 +56,12 @@ export function AssignUserModal({ onClose, onAssignUser}) {
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-60">
-            <div className="bg-gray-800 p-6 rounded shadow-lg w-full max-w-md">
-                <h3 className="text-xl font-bold mb-2">Asignar Usuario</h3>
+            <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
+                <h3 className="text-xl text-gray-700 font-bold mb-2">Asignar Usuario</h3>
                 <select
                     value={usuarioSeleccionado}
                     onChange={(e) => setUsuarioSeleccionado(e.target.value)}
-                    className="bg-gray-700 text-white p-2 rounded w-full"
+                    className="bg-gray-300 text-gray-700 p-2 rounded w-full"
                 >
                     <option value="">Seleccione un usuario</option>
                     {usuarios.map((usuario) => (
@@ -70,12 +70,23 @@ export function AssignUserModal({ onClose, onAssignUser}) {
                         </option>
                     ))}
                 </select>
-                <div className="mt-4 flex justify-end">
-                    <button onClick={onClose} aria-label="Cerrar modal" className="bg-red-600 text-white rounded px-4 py-2 mr-2">Cerrar</button>
-                    <button onClick={handleAssign} className="bg-blue-600 text-white rounded px-4 py-2">Asignar</button>
-                </div>
+                <div className="mt-4 flex justify-end gap-4">
+  <button
+    onClick={handleAssign}
+    className="bg-blue-600 hover:bg-blue-700 text-white rounded-md px-4 py-2 border-b-4 border-blue-800 shadow-md"
+  >
+    Asignar
+  </button>
+  <button
+    onClick={onClose}
+    aria-label="Cerrar modal"
+    className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md border-b-4 border-gray-700 shadow-md"
+  >
+    Cancelar
+  </button>
+</div>
+
             </div>
         </div>
     );
 }
-

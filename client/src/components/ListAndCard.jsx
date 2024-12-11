@@ -183,7 +183,7 @@ export function ListAndCard() {
 
 
         <button
-          className="bg-green-600 hover:bg-green-700 font-bold rounded-lg p-4"
+          className="bg-[#7B60B0] hover:bg-[#65439A] rounded-lg p-4"
           onClick={() =>
             toast(
               (t) => (
@@ -223,12 +223,12 @@ export function ListAndCard() {
         {lists.map((list) => (
           <div key={list.idLista} className={`${
             (list.idEstado === 1 && cards.filter(card => card.idLista === list.idLista).length <= list.maxWip)
-              ? "bg-amber-400"
+              ? "bg-[#fecaca]"
               : (list.idEstado === 2 && cards.filter(card => card.idLista === list.idLista).length <= list.maxWip)
-              ? "bg-blue-400"
+              ? "bg-[#a7f3d0]"
               : (list.idEstado === 3 && cards.filter(card => card.idLista === list.idLista).length <= list.maxWip)
-              ? "bg-green-500"
-              : "bg-red-600"
+              ? "bg-[#fde68a]"
+              : "bg-red-500"
           } shadow-md rounded-lg w-60 h-[600px] overflow-hidden`}>
             <div className="bg-gray-700 shadow-md p-4 flex justify-between items-center">
               <h2 className="text-xl font-bold text-white">{list.nombreLista}</h2>
@@ -277,10 +277,10 @@ export function ListAndCard() {
                   />
                 ) : (
                   <button
-                    className="mt-4 py-2 px-4 bg-blue-600 text-white rounded hover:bg-blue-700"
+                    className="mt-4 py-2 px-4 bg-white text-gray-500 rounded hover:bg-gray-200"
                     onClick={() => handleCreateCard(list.idLista)} // Pasar el ID de la lista
                   >
-                    + Crear nueva tarjeta
+                    + Agregar nueva tarea
                   </button>
                 )}
               </div>

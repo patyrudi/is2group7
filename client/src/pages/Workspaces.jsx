@@ -106,60 +106,77 @@ export function Workspaces() {
   
 
   return (
-    <div>
-      <NavBar />
-      <div className="container mx-auto my-6 p-6 bg-transparent shadow-lg rounded-lg flex justify-between items-center">
-        <h2 className="text-2xl font-bold mb-4">Workspaces</h2>
-        <button
-                            className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow hover:bg-blue-700 transition duration-300"
-                            onClick={() => navigate(`/MainMenu/`)}
-                        >
-                            Menu principal
-                    </button>
-        
-      </div>
-      <div className="container mx-auto my-6 p-6 bg-transparent shadow-lg rounded-lg">
-        <div className="grid grid-cols-3 gap-4">
-          {workspaces.map((workspace) => (
-            <div
-              key={workspace.idEspacio}
-              className="bg-gray-800 p-12 rounded-lg text-center hover:bg-gray-700"
-              onClick={() => {
-                navigate(`/Workspaces/${workspace.idEspacio}/Boards/`);
-              }}
-            >
-              {workspace.nombreEspacio}
-            </div>
-          ))}
-          {/* Botón para crear nuevo espacio */}
-          {!isCreating ? (
-            <button
-              onClick={() => setIsCreating(true)}
-              className="bg-gray-800 p-4 rounded-lg text-center flex justify-center items-center hover:bg-gray-700"
-            >
-              <span className="text-3xl">+</span>
-            </button>
-          ) : (
-            <form
-              onSubmit={handleSubmit(onSubmit)}
-              className="bg-gray-800 p-4 rounded-lg text-center"
-            >
-              <input
-                type="text"
-                placeholder="Nombre del Espacio"
-                {...register("nombreEspacio", { required: true })}
-                className="w-full p-2 mb-2 bg-white text-black"
-              />
-              <button
-                type="submit"
-                className="w-full py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded"
-              >
-                Crear Espacio
-              </button>
-            </form>
-          )}
+<div>
+  <NavBar />
+  {/* Contenedor principal del encabezado */}
+  <div className="container mx-auto my-6 p-6 bg-white shadow-lg rounded-lg flex justify-between items-center">
+    <h2 className="text-2xl font-bold text-gray-600">Workspaces</h2>
+    <button
+      className="px-4 py-2 bg-[#7B60B0] hover:bg-[#65439A] text-white font-semibold rounded-lg shadow hover:scale-105 transition duration-300"
+      onClick={() => navigate(`/MainMenu/`)}
+    >
+      Menú principal
+    </button>
+  </div>
+
+  {/* Contenedor principal de workspaces */}
+  <div className="container mx-auto my-6 p-6 bg-white shadow-lg rounded-lg">
+    <div className="grid grid-cols-3 gap-4">
+      {workspaces.map((workspace) => (
+        <div
+          key={workspace.idEspacio}
+          className="bg-cyan-600 text-white font-semibold p-12 rounded-lg text-center hover:bg-cyan-700 transition duration-300 cursor-pointer"
+          onClick={() => {
+            navigate(`/Workspaces/${workspace.idEspacio}/Boards/`);
+          }}
+        >
+          {workspace.nombreEspacio}
         </div>
-      </div>
+      ))}
+
+      {/* Botón para crear nuevo espacio */}
+      {!isCreating ? (
+        <button
+          onClick={() => setIsCreating(true)}
+          className="bg-[#7B60B0] text-white p-4 rounded-lg text-center flex justify-center items-center hover:bg-[#65439A] transition duration-300"
+        >
+          <span className="text-3xl">+</span>
+        </button>
+      ) : (
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="bg-[#F2E7FF] shadow p-4 rounded-lg text-center"
+        >
+          <input
+            type="text"
+            placeholder="Nombre del Espacio"
+            {...register("nombreEspacio", { required: true })}
+            className="border bg-white p-3 rounded w-full text-black mb-4 focus:outline-none focus:ring-2 focus:ring-purple-300"
+          />
+          <div className="flex justify-between gap-2">
+            {/* Botón de Crear */}
+            <button
+              type="submit"
+              className="w-1/2 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded transition duration-300"
+            >
+              Crear Espacio
+            </button>
+            {/* Botón de Cancelar */}
+            <button
+              type="button"
+              onClick={() => setIsCreating(false)}
+              className="w-1/2 py-2 bg-gray-400 hover:bg-gray-500 text-white font-semibold rounded transition duration-300"
+            >
+              Cancelar
+            </button>
+          </div>
+        </form>
+      )}
     </div>
+  </div>
+</div>
+
+
+
   );
 }

@@ -47,118 +47,124 @@ export function Register() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen text-white">
-      <div className="w-full max-w-4xl p-8 bg-gray-800 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold mb-6 text-center bg-gradient-to-r from-blue-400 to-pink-200 bg-clip-text text-transparent">
-          Crear Cuenta
-        </h2>
-        <form onSubmit={handleSubmit}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="mb-4">
-              <label
-                htmlFor="firstName"
-                className="block text-sm font-medium mb-2"
-              >
-                Nombre
-              </label>
-              <input
-                type="text"
-                id="firstName"
-                value={userData.firstName}
-                onChange={handleInputChange}
-                placeholder="Nombre"
-                className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            <div className="mb-4">
-              <label
-                htmlFor="lastName"
-                className="block text-sm font-medium mb-2"
-              >
-                Apellido
-              </label>
-              <input
-                type="text"
-                id="lastName"
-                value={userData.lastName}
-                onChange={handleInputChange}
-                placeholder="Apellido"
-                className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            <div className="mb-4 col-span-2 md:col-span-1">
-              <label htmlFor="email" className="block text-sm font-medium mb-2">
-                Correo
-              </label>
-              <input
-                type="email"
-                id="email"
-                value={userData.email}
-                onChange={handleInputChange}
-                placeholder="correo@ejemplo.com"
-                className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            <div className="mb-4 col-span-2 md:col-span-1">
-              <label
-                htmlFor="username"
-                className="block text-sm font-medium mb-2"
-              >
-                Nombre de Usuario
-              </label>
-              <input
-                type="text"
-                id="username"
-                value={userData.username}
-                onChange={handleInputChange}
-                placeholder="Nombre de Usuario"
-                className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            <div className="mb-6 col-span-2 md:col-span-1">
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium mb-2"
-              >
-                Contraseña
-              </label>
-              <input
-                type="password"
-                id="password"
-                value={userData.password}
-                onChange={handleInputChange}
-                placeholder="********"
-                className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            <div className="mb-6 col-span-2 md:col-span-1">
-              <label
-                htmlFor="confirmPassword"
-                className="block text-sm font-medium mb-2"
-              >
-                Repetir Contraseña
-              </label>
-              <input
-                type="password"
-                id="confirmPassword"
-                value={userData.confirmPassword}
-                onChange={handleInputChange}
-                placeholder="********"
-                className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-          </div>
-          <button
-            type="submit"
-            className="w-full py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded focus:outline-none focus:ring-2 focus:ring-blue-500 mt-6"
+<div
+  className="flex items-center justify-center min-h-screen"
+  style={{
+    background: "linear-gradient(to right, #E8EAF6, #C5CAE9)", // Azul claro degradado
+  }}
+>
+  <div className="w-full max-w-4xl p-8 bg-white rounded-lg shadow-lg">
+    <h2 className="text-gray-700 text-2xl font-bold mb-8 text-center">
+    ¡Regístrate para gestionar tus tareas y alcanzar tus metas!
+    </h2>
+    <form onSubmit={handleSubmit}>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="mb-4">
+          <label
+            htmlFor="firstName"
+            className="block text-sm font-medium text-gray-700 mb-2"
           >
-            Crear Cuenta
-          </button>
-        </form>
-        <div className="text-center mt-3">
-          <NavigationLogin />
+            Nombre
+          </label>
+          <input
+            type="text"
+            id="firstName"
+            value={userData.firstName}
+            onChange={handleInputChange}
+            placeholder="Nombre"
+            className="w-full p-2 bg-gray-100 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
+          />
+        </div>
+        <div className="mb-4">
+          <label
+            htmlFor="lastName"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
+            Apellido
+          </label>
+          <input
+            type="text"
+            id="lastName"
+            value={userData.lastName}
+            onChange={handleInputChange}
+            placeholder="Apellido"
+            className="w-full p-2 bg-gray-100 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
+          />
+        </div>
+        <div className="mb-4 col-span-2 md:col-span-1">
+          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+            Correo
+          </label>
+          <input
+            type="email"
+            id="email"
+            value={userData.email}
+            onChange={handleInputChange}
+            placeholder="correo@ejemplo.com"
+            className="w-full p-2 bg-gray-100 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-300"
+          />
+        </div>
+        <div className="mb-4 col-span-2 md:col-span-1">
+          <label
+            htmlFor="username"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
+            Nombre de Usuario
+          </label>
+          <input
+            type="text"
+            id="username"
+            value={userData.username}
+            onChange={handleInputChange}
+            placeholder="Nombre de Usuario"
+            className="w-full p-2 bg-gray-100 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-300"
+          />
+        </div>
+        <div className="mb-6 col-span-2 md:col-span-1">
+          <label
+            htmlFor="password"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
+            Contraseña
+          </label>
+          <input
+            type="password"
+            id="password"
+            value={userData.password}
+            onChange={handleInputChange}
+            placeholder="********"
+            className="w-full p-2 bg-gray-100 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
+          />
+        </div>
+        <div className="mb-6 col-span-2 md:col-span-1">
+          <label
+            htmlFor="confirmPassword"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
+            Repetir Contraseña
+          </label>
+          <input
+            type="password"
+            id="confirmPassword"
+            value={userData.confirmPassword}
+            onChange={handleInputChange}
+            placeholder="********"
+            className="w-full p-2 bg-gray-100 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
+          />
         </div>
       </div>
+      <button
+        type="submit"
+        className="w-full py-3 bg-teal-600 text-white font-bold rounded-lg text-lg shadow-lg hover:bg-teal-700 focus:outline-none focus:ring-2 hover:scale-105 transition duration-300"
+      >
+        Crear Cuenta
+      </button>
+    </form>
+    <div className="text-center mt-3">
+      <NavigationLogin />
     </div>
+  </div>
+</div>
+
   );
 }

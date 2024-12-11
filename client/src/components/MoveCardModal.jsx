@@ -24,7 +24,7 @@ export function MoveCardModal({ idLista, onClose, onMoveCard }) {
 
   const handleMove = async () => {
     if (selectedListId) {
-    
+
       try {
         console.log(selectedListId);
         await onMoveCard(selectedListId);
@@ -32,14 +32,14 @@ export function MoveCardModal({ idLista, onClose, onMoveCard }) {
       } catch (error) {
         console.error("Error updating card:", error.message);
       }
-    } 
+    }
   };
-  
+
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 text-white">
-      <div className="bg-gray-800 p-6 rounded shadow-lg w-full max-w-md relative">
-        <h3 className="text-xl font-bold mb-4">Mover tarjeta</h3>
+      <div className="bg-white p-6 rounded shadow-lg w-full max-w-md relative">
+        <h3 className="text-xl text-gray-800 font-bold mb-4">Mover tarjeta</h3>
 
         <label htmlFor="lista" className="block mb-2">
           Selecciona una lista:
@@ -48,12 +48,12 @@ export function MoveCardModal({ idLista, onClose, onMoveCard }) {
           id="lista"
           value={selectedListId}
           onChange={(e) => setSelectedListId(e.target.value)} // Actualiza el estado con la lista seleccionada
-          className="border rounded p-2 w-full mb-4 bg-gray-700 text-white">
+          className="border rounded p-2 w-full mb-4 bg-white text-gray-700">
           <option value="" disabled>
             Elige una lista
           </option>
           {listas
-            .filter((lista) => lista.idLista !== idLista && lista.idTablero == idTablero ) // Filtra la lista actual de la tarjeta
+            .filter((lista) => lista.idLista !== idLista && lista.idTablero == idTablero) // Filtra la lista actual de la tarjeta
             .map((lista) => (
               <option key={lista.idLista} value={lista.idLista}>
                 {`${lista.nombreLista}`}
@@ -62,18 +62,21 @@ export function MoveCardModal({ idLista, onClose, onMoveCard }) {
         </select>
 
         <div className="flex justify-end">
-          <button
-            onClick={handleMove} // Llama a la función para mover la tarjeta
-            className="bg-blue-600 text-white rounded px-4 py-2 mr-2"
-          >
-            Mover
-          </button>
-          <button
-            onClick={onClose} // Cierra el modal
-            className="bg-gray-600 text-white rounded px-4 py-2"
-          >
-            Cancelar
-          </button>
+          <div className="flex justify-end gap-4">
+            <button
+              onClick={handleMove}
+              className="bg-blue-600 hover:bg-blue-700 text-white rounded-md px-4 py-2 border-b-4 border-blue-800 shadow-md"
+            >
+              Mover
+            </button>
+            <button
+              onClick={onClose}
+              className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md border-b-4 border-gray-700 shadow-md"
+            >
+              Cancelar
+            </button>
+          </div>
+
         </div>
       </div>
     </div>

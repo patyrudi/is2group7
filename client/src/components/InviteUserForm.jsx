@@ -63,10 +63,11 @@ export function InviteUserForm({ idEspacio }) {
       <select
         value={selectedUsername}
         onChange={(e) => setSelectedUsername(e.target.value)}
-        className="border-b border-blue-400 focus:outline-none focus:border-blue-600 text-blue-600 placeholder-blue-400 mr-2 px-4 py-2 rounded"
+        className="border-b border-blue-400 focus:outline-none focus:border-blue-500 text-blue-600 placeholder-gray-400 mr-2 px-4 py-2 rounded-lg shadow-md focus:ring-2 focus:ring-blue-400"
+
       >
         <option value="" disabled>
-          Selecciona un usuario
+          Elegir Usuario
         </option>
         {users.map((user) => (
           <option key={user.idUsuario} value={user.username}>
@@ -76,7 +77,7 @@ export function InviteUserForm({ idEspacio }) {
       </select>
       <button
         onClick={handleInviteUser}
-        className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-500"
+        className="bg-green-600 text-white px-6 py-2 rounded-lg shadow-md hover:bg-green-700 hover:shadow-lg hover:scale-105 transition duration-300"
       >
         Invitar
       </button>
