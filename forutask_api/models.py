@@ -107,5 +107,6 @@ class UsuariosAsignados(models.Model):
     idUser = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     idEspacio = models.ForeignKey(EspacioDeTrabajo, on_delete=models.CASCADE)
 
+
     def __str__(self):
         return f"{self.tipoUsuario} - {self.idUser}"

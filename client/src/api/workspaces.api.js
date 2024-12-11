@@ -13,3 +13,15 @@ export const updateWorkspace = (idEspacio, workspace) => api.patch(`/espacios/${
 export const getAllAssignedWorkspaces = () => api.get('/usuarios_asignados/');
 
 export const createAssignedWorkspaces = (workspace) => api.post('/crearespacio/',workspace);
+
+export const disableWorkspace = async (payload) => {
+    console.log(  console.log('Payload enviado:', payload))
+    try {
+      const response = await api.post('/deshabilitar-espacio/', payload);
+
+      return response.data;
+    } catch (error) {
+      console.error('Error en disableWorkspace:', error);
+      throw error;
+    }
+  };

@@ -23,7 +23,7 @@ export function NavBar() {
     {/* Logo */}
     <Link
       to="/MainMenu"
-      className="text-white text-lg font-bold hover:text-[#0d9488] transition duration-300"
+      className="text-white text-lg font-bold hover:text-[#4ade80] transition duration-300"
     >
       4UTask
     </Link>
@@ -33,31 +33,31 @@ export function NavBar() {
       <>
         <Link
           to="/MainMenu"
-          className="text-white font-medium hover:text-[#4a5da8] transition duration-300"
+          className="text-white font-medium hover:text-[#4ade80] transition duration-300"
         >
           Home
         </Link>
         <Link
           to="/Workspaces"
-          className="text-white  font-medium hover:text-[#4a5da8] transition duration-300"
+          className="text-white  font-medium hover:text-[#4ade80] transition duration-300"
         >
           My Workspaces
         </Link>
         <Link
           to="/UserManagement"
-          className="text-white  font-medium hover:text-[#4a5da8] transition duration-300"
+          className="text-white  font-medium hover:text-[#4ade80] transition duration-300"
         >
           Users Management
         </Link>
         <Link
           to="/MyProfile"
-          className="text-white font-medium hover:text-[#4a5da8] transition duration-300"
+          className="text-white font-medium hover:text-[#4ade80] transition duration-300"
         >
           My Profile
         </Link>
         <button
           onClick={handleLogout}
-          className="text-white  font-medium hover:text-[#4a5da8] transition duration-300"
+          className="text-white  font-medium hover:text-[#4ade80] transition duration-300"
         >
           Logout
         </button>
@@ -65,7 +65,7 @@ export function NavBar() {
     ) : (
       <Link
         to="/login"
-        className="text-white font-medium hover:text-[#4a5da8] transition duration-300"
+        className="text-white font-medium hover:text-[#4ade80] transition duration-300"
       >
         Login
       </Link>

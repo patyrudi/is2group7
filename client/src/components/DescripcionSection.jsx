@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { FaPencilAlt } from "react-icons/fa"; // Asegúrate de tener instalada la biblioteca react-icons.
+import { FaPencilAlt } from "react-icons/fa"; 
 
 export function DescripcionSection({ descripcionInicial, onGuardarDescripcion }) {
   const [descripcion, setDescripcion] = useState(descripcionInicial);

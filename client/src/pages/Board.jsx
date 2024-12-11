@@ -60,7 +60,7 @@ export function Board() {
         <div className="flex items-center space-x-4"> {/* Espaciado entre los botones */}
         <button
             onClick={() => navigate(`/Workspaces/${idEspacio}/Boards/`)}  // Regresa a la página anterior
-            className=" bg-[#3b82f6] hover:bg-[#2563eb] text-white font-bold py-2 px-5 rounded-lg shadow-md hover:scale-105 transition duration-300"
+            className=" bg-[#3b82f6] hover:bg-[#2563eb] text-white py-2 px-5 rounded-lg shadow-md hover:scale-105 transition duration-300"
           >
             {/* Carácter Unicode para una flecha hacia la izquierda */}
             <span className="mr-2">←</span> Volver

@@ -72,7 +72,7 @@ export function Register() {
             value={userData.firstName}
             onChange={handleInputChange}
             placeholder="Nombre"
-            className="w-full p-2 bg-gray-100 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
+            className="w-full p-2 bg-gray-100 text-gray-800 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-300"
           />
         </div>
         <div className="mb-4">
@@ -88,7 +88,7 @@ export function Register() {
             value={userData.lastName}
             onChange={handleInputChange}
             placeholder="Apellido"
-            className="w-full p-2 bg-gray-100 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
+            className="w-full p-2 bg-gray-100 text-gray-800 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-300"
           />
         </div>
         <div className="mb-4 col-span-2 md:col-span-1">
@@ -101,10 +101,10 @@ export function Register() {
             value={userData.email}
             onChange={handleInputChange}
             placeholder="correo@ejemplo.com"
-            className="w-full p-2 bg-gray-100 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-300"
+            className="w-full p-2 bg-gray-100 text-gray-800 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-300"
           />
         </div>
-        <div className="mb-4 col-span-2 md:col-span-1">
+        <div className="text-gray-800 mb-4 col-span-2 md:col-span-1">
           <label
             htmlFor="username"
             className="block text-sm font-medium text-gray-700 mb-2"
@@ -120,7 +120,7 @@ export function Register() {
             className="w-full p-2 bg-gray-100 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-300"
           />
         </div>
-        <div className="mb-6 col-span-2 md:col-span-1">
+        <div className="text-gray-800 mb-6 col-span-2 md:col-span-1">
           <label
             htmlFor="password"
             className="block text-sm font-medium text-gray-700 mb-2"
@@ -133,10 +133,10 @@ export function Register() {
             value={userData.password}
             onChange={handleInputChange}
             placeholder="********"
-            className="w-full p-2 bg-gray-100 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
+            className="w-full p-2 bg-gray-100 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-300"
           />
         </div>
-        <div className="mb-6 col-span-2 md:col-span-1">
+        <div className="text-gray-800 mb-6 col-span-2 md:col-span-1">
           <label
             htmlFor="confirmPassword"
             className="block text-sm font-medium text-gray-700 mb-2"
@@ -149,7 +149,7 @@ export function Register() {
             value={userData.confirmPassword}
             onChange={handleInputChange}
             placeholder="********"
-            className="w-full p-2 bg-gray-100 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
+            className="w-full p-2 bg-gray-100 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-300"
           />
         </div>
       </div>

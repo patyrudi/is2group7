@@ -1,18 +1,21 @@
 import { useEffect, useState } from "react";
 import { NavBar } from "../components/NavBar";
 import { useParams, useNavigate } from "react-router-dom";
-import { getWorkspace, updateWorkspace } from "../api/workspaces.api";
+import { getWorkspace, updateWorkspace, disableWorkspace } from "../api/workspaces.api";
 import { InviteUserForm } from "../components/InviteUserForm";
 import { BoardsList } from '../components/BoardsList';
 import { toast } from "react-hot-toast";
 import { FaArrowLeft } from "react-icons/fa"; // Importar ícono de React Icons.
 
 export function Boards() {
-  const { idEspacio } = useParams();
+  const params = useParams();
+  const idEspacio = params.idEspacio;
   const navigate = useNavigate();
   const [workspace, setWorkspace] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [workspaceName, setWorkspaceName] = useState("");
+  const idUser = localStorage.getItem('idUsuario');
+  console.log(idUser);
 
   const toastStyles = {
     container: {
@@ -85,30 +88,56 @@ export function Boards() {
         ¿Estás seguro de deshabilitar el espacio de trabajo?
         <div style={toastStyles.buttonContainer}>
           <button
-            style={toastStyles.buttonYes}
             onClick={async () => {
               toast.dismiss(t.id);
               try {
-                await updateWorkspace(idEspacio, { estadoEspacio: false });
-                toast.success('Espacio deshabilitado', { style: toastStyles.container });
-                navigate("/workspaces");
+                const idUsuario = localStorage.getItem('idUsuario'); 
+                const idEspacio = params.idEspacio;
+                
+                if (!idUsuario) {
+                  console.error('idUsuario no encontrado en localStorage');
+                  return;
+                }
+  
+                // Asegurarse de que los valores sean primitivos (string o number)
+                const payload = {
+                  idUser: idUsuario, 
+                  idEspacio: idEspacio
+                };
+  
+                console.log('idUsuario:', idUsuario);
+                console.log('idEspacio:', idEspacio);
+  
+                await disableWorkspace(payload);
+                toast.success('Espacio deshabilitado');
+                navigate("/workspaces"); // Redireccionar a la página de Workspaces
               } catch (error) {
                 console.error("Error disabling workspace:", error);
+                toast.error('No eres owner, no puedes deshabilitar este espacio');
               }
             }}
+            style={toastStyles.buttonYes}
           >
             Sí
           </button>
           <button
-            style={toastStyles.buttonNo}
             onClick={() => toast.dismiss(t.id)}
+            style={toastStyles.buttonNo}
           >
             No
           </button>
         </div>
       </span>
-    ));
+    ), {
+      style: {
+        borderRadius: '10px',
+        background: '#FFFFFF',
+        color: '#fff',
+        padding: '15px',
+      },
+    });
   };
+  
 
   const handleEditWorkspace = () => setEditMode(true);
 
@@ -170,7 +199,7 @@ export function Boards() {
           <>
            <button
             onClick={() => navigate(`/Workspaces/`)}  // Regresa a la página anterior
-            className=" bg-[#3b82f6] hover:bg-[#2563eb] text-white font-bold py-2 px-5 rounded-lg shadow-md hover:scale-105 transition duration-300"
+            className=" bg-[#3b82f6] hover:bg-[#2563eb] text-white py-2 px-5 rounded-lg shadow-md hover:scale-105 transition duration-300"
           >
             {/* Carácter Unicode para una flecha hacia la izquierda */}
             <span className="mr-2">←</span> Volver

@@ -135,6 +135,11 @@ class BuscarTarjetasPorEtiquetasView(APIView):
         serializer = TarjetaSerializer(tarjetas, many=True)
         return Response(serializer.data)
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from .models import UsuariosAsignados, EspacioDeTrabajo
+
 
 class UsuarioView(viewsets.ModelViewSet):
     serializer_class = UsuarioSerializer
@@ -198,6 +203,7 @@ class ObtenerIDUsuario(APIView):
             return Response({'error': 'Usuario no encontrado'}, status=status.HTTP_404_NOT_FOUND)
 
 
+
 class CrearEspacioTrabajoYAsignarUsuario(APIView):
     def post(self, request):
         accion = request.data.get('accion')
@@ -207,7 +213,7 @@ class CrearEspacioTrabajoYAsignarUsuario(APIView):
             # Crear un nuevo espacio de trabajo y asignar al creador como 'Owner'
             idUser = request.data.get('idUser')
             idEspacio = request.data.get('idEspacio')  # Usa ID en lugar de nombre
-            
+
             if not idUser or not idEspacio:
                 return Response({'error': 'Faltan parámetros'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -265,6 +271,33 @@ class CrearEspacioTrabajoYAsignarUsuario(APIView):
 
         else:
             return Response({'error': 'Acción no válida'}, status=status.HTTP_400_BAD_REQUEST)
+        
+
+class VerificarOwnerView(APIView):
+    def post(self, request):
+        idUser = request.data.get("idUser")
+        idEspacio = request.data.get("idEspacio")
+
+        if not idUser or not idEspacio:
+            return Response({"error": "Faltan parÃ¡metros idUser o idEspacio"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Verificar si el usuario es OWNER del espacio de trabajo
+        es_owner = UsuariosAsignados.objects.filter(
+            idUser=idUser, 
+            idEspacio=idEspacio, 
+            tipoUsuario="Owner"
+        ).exists()
+
+        if es_owner:
+            try:
+                espacio = EspacioDeTrabajo.objects.get(idEspacio=idEspacio)
+                espacio.estadoEspacio = False
+                espacio.save()
+                return Response({"message": "El estado del espacio de trabajo ha sido actualizado a False correctamente."})
+            except EspacioDeTrabajo.DoesNotExist:
+                return Response({"error": "El espacio de trabajo no existe."}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            return Response({"error": "El usuario no tiene permiso para modificar este espacio."}, status=status.HTTP_403_FORBIDDEN)
     
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
