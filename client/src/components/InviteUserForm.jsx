@@ -6,7 +6,7 @@ import { toast } from "react-hot-toast";
 export function InviteUserForm({ idEspacio }) {
   const [users, setUsers] = useState([]);
   const [selectedUsername, setSelectedUsername] = useState("");
-  const toastperso = { style: { borderRadius: '10px', background: '#333', color: '#fff' } };
+  const toastperso = { style: { borderRadius: '10px', background: '#fff', color: '#000' } };
 
   useEffect(() => {
     const fetchUsers = async () => {

@@ -33,5 +33,6 @@ urlpatterns = [
     path('api/v1/tareas_atrasadas/<int:idTablero>/', TareasAtrasadasEnTableroView.as_view(), name="tareas_atrasadas"),
     path('api/v1/tareas_por_usuario/<int:idTablero>/', TareasPorUsuarioEnTableroView.as_view(), name="tareas_por_usuario"),
     path('api/v1/buscar_tarjetas_por_usuario/', BuscarTarjetasPorUsuarioView.as_view(), name='buscar_tarjetas_por_usuario'),
+    path('api/v1/buscar_tarjetas_por_etiquetas/', BuscarTarjetasPorEtiquetasView.as_view(), name='buscar_tarjetas_por_etiquetas'),
     path('api/v1/deshabilitar-espacio/', VerificarOwnerView.as_view(), name='deshabilitar_espacio'),
 ]
